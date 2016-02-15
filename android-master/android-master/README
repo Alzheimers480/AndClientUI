@@ -1,0 +1,11 @@
+:: Install the android sdk and these command should work
+
+:: To make project
+mkdir alzand; android create project --target android-19 --name alzand --path alzand --activity MainActivity --package com.cse480.alzand --gradle --gradle-version 0.11.+;
+
+:: To build then install android apk
+cd alzand;
+./gradlew assembleDebug;
+
+:: Make sure your android emulator is running before install
+./gradlew installDebug;
