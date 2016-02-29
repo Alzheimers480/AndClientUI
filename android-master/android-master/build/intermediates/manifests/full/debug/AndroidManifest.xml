@@ -37,6 +37,9 @@
         <activity
             android:name="com.cse480.alzand.AddActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.cse480.alzand.Picture"
+            android:theme="@android:style/Theme.NoTitleBar" />
     </application>
 
 </manifest>

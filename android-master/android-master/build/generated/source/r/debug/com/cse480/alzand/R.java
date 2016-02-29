@@ -829,13 +829,14 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f0b0024;
         public static final int activity_chooser_view_content=0x7f0b0025;
         public static final int always=0x7f0b0013;
-        public static final int b1=0x7f0b004c;
+        public static final int b1=0x7f0b0050;
         public static final int bAdd=0x7f0b0040;
         public static final int bContinue=0x7f0b004b;
-        public static final int bLogin=0x7f0b0050;
-        public static final int bLogout=0x7f0b004e;
+        public static final int bLogin=0x7f0b0054;
+        public static final int bLogout=0x7f0b0052;
         public static final int bRegister=0x7f0b0048;
         public static final int beginning=0x7f0b000f;
+        public static final int btnPicture=0x7f0b004f;
         public static final int checkbox=0x7f0b002d;
         public static final int collapseActionView=0x7f0b0014;
         public static final int default_activity_button=0x7f0b0028;
@@ -863,10 +864,11 @@ containing a value of this type.
         public static final int icon=0x7f0b002a;
         public static final int ifRoom=0x7f0b0015;
         public static final int image=0x7f0b0027;
+        public static final int imageView=0x7f0b004e;
         public static final int listMode=0x7f0b0006;
         public static final int list_item=0x7f0b0029;
         public static final int middle=0x7f0b0011;
-        public static final int myoutput=0x7f0b004f;
+        public static final int myoutput=0x7f0b0053;
         public static final int never=0x7f0b0016;
         public static final int none=0x7f0b0012;
         public static final int normal=0x7f0b0007;
@@ -889,13 +891,15 @@ containing a value of this type.
         public static final int showTitle=0x7f0b000d;
         public static final int split_action_bar=0x7f0b001e;
         public static final int submit_area=0x7f0b0039;
+        public static final int surfaceView=0x7f0b004d;
         public static final int tabMode=0x7f0b0008;
+        public static final int textview=0x7f0b004c;
         public static final int title=0x7f0b002b;
         public static final int top_action_bar=0x7f0b0020;
-        public static final int tvAcquaintance=0x7f0b004d;
+        public static final int tvAcquaintance=0x7f0b0051;
         public static final int tvCancel=0x7f0b0041;
-        public static final int tvForgotPassword=0x7f0b0052;
-        public static final int tvRegisterLink=0x7f0b0051;
+        public static final int tvForgotPassword=0x7f0b0056;
+        public static final int tvRegisterLink=0x7f0b0055;
         public static final int up=0x7f0b0021;
         public static final int useLogo=0x7f0b000e;
         public static final int withText=0x7f0b0017;
@@ -931,9 +935,10 @@ containing a value of this type.
         public static final int activity_add=0x7f030018;
         public static final int activity_create_user=0x7f030019;
         public static final int activity_forgot_password=0x7f03001a;
-        public static final int activity_user=0x7f03001b;
-        public static final int main=0x7f03001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int activity_picture=0x7f03001b;
+        public static final int activity_user=0x7f03001c;
+        public static final int main=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }
     public static final class string {
         public static final int abc_action_bar_home_description=0x7f050000;

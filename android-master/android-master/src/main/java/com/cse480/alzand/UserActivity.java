@@ -2,7 +2,6 @@ package com.cse480.alzand;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +34,7 @@ public class UserActivity extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.b1:
-                //startActivity(new Intent(this, TakePicture.class)); Josh's cam classname needed
+                startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed
                 break;
             case R.id.tvAcquaintance:
                     startActivity(new Intent(this, AddActivity.class));

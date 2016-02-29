@@ -2,7 +2,6 @@ package com.cse480.alzand;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -109,7 +108,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     startActivity(new Intent(this, AddActivity.class));
                 }
                 else{
-                    //startActivity(new Intent(this, TakePicture.class)); Josh's cam classname needed for 5 pics
+                    startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed for 5 pics
                 }
                 break;
             case R.id.tvCancel:

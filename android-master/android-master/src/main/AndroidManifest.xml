@@ -33,6 +33,8 @@
             android:theme="@android:style/Theme.NoTitleBar"/>
         <activity android:name=".AddActivity"
             android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity android:name=".Picture"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
     </application>
 
 </manifest>
