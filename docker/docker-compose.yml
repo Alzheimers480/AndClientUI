@@ -1,0 +1,10 @@
+db:
+    build: sqlserver/
+    volumes:
+        - ./sqlserver/data:/docker-entrypoint-initdb.d
+web:
+    build: webserver/
+    ports:
+        - "80:80"
+    links:
+        - db

@@ -829,10 +829,11 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f0b0024;
         public static final int activity_chooser_view_content=0x7f0b0025;
         public static final int always=0x7f0b0013;
+        public static final int b1=0x7f0b004c;
         public static final int bAdd=0x7f0b0040;
         public static final int bContinue=0x7f0b004b;
-        public static final int bLogin=0x7f0b004f;
-        public static final int bLogout=0x7f0b004d;
+        public static final int bLogin=0x7f0b0050;
+        public static final int bLogout=0x7f0b004e;
         public static final int bRegister=0x7f0b0048;
         public static final int beginning=0x7f0b000f;
         public static final int checkbox=0x7f0b002d;
@@ -865,7 +866,7 @@ containing a value of this type.
         public static final int listMode=0x7f0b0006;
         public static final int list_item=0x7f0b0029;
         public static final int middle=0x7f0b0011;
-        public static final int myoutput=0x7f0b004e;
+        public static final int myoutput=0x7f0b004f;
         public static final int never=0x7f0b0016;
         public static final int none=0x7f0b0012;
         public static final int normal=0x7f0b0007;
@@ -891,10 +892,10 @@ containing a value of this type.
         public static final int tabMode=0x7f0b0008;
         public static final int title=0x7f0b002b;
         public static final int top_action_bar=0x7f0b0020;
-        public static final int tvAcquaintance=0x7f0b004c;
+        public static final int tvAcquaintance=0x7f0b004d;
         public static final int tvCancel=0x7f0b0041;
-        public static final int tvForgotPassword=0x7f0b0051;
-        public static final int tvRegisterLink=0x7f0b0050;
+        public static final int tvForgotPassword=0x7f0b0052;
+        public static final int tvRegisterLink=0x7f0b0051;
         public static final int up=0x7f0b0021;
         public static final int useLogo=0x7f0b000e;
         public static final int withText=0x7f0b0017;

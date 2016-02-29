@@ -2,5 +2,9 @@
     {
         "merged": "C:\\Users\\isaac\\Desktop\\android-master\\android-master\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_launcher.png",
         "source": "C:\\Users\\isaac\\Desktop\\android-master\\android-master\\src\\main\\res\\drawable-ldpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\isaac\\AndClient\\android-master\\android-master\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\isaac\\AndClient\\android-master\\android-master\\src\\main\\res\\drawable-ldpi\\ic_launcher.png"
     }
 ]

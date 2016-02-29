@@ -99,17 +99,11 @@ public class MainActivity extends Activity implements View.OnClickListener
 					InputStream response = httpClient.getInputStream();
 					//converts InputStream -> String
 					String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-					//String result="";
+
 					try {
 						result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
 					}catch(Throwable e){}
 
-					/*if(result.equals("False")){
-						startActivity(new Intent(this, MainActivity.class));
-					}
-					else{
-						startActivity(new Intent(this, UserActivity.class));
-					}*/
 					//TextView outputTextView = (TextView)findViewById(R.id.myoutput);
 					//outputTextView.setText(inputStreamString);
 				}
@@ -134,20 +128,11 @@ public class MainActivity extends Activity implements View.OnClickListener
 					InputStream response = httpClient.getInputStream();
 					//converts InputStream -> String
 					String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-					//String result2="";
+
 					try {
-						//result2 = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
 						result2 = inputStreamString.toString();
 					}catch(Throwable e){}
 
-					/*if(result.equals("False")){
-						startActivity(new Intent(this, MainActivity.class));
-					}
-					else{
-						startActivity(new Intent(this, UserActivity.class));
-					}*/
-					//TextView outputTextView = (TextView)findViewById(R.id.myoutput);
-					//outputTextView.setText(inputStreamString);
 				}
 				catch(Exception ex){}
 
@@ -157,7 +142,6 @@ public class MainActivity extends Activity implements View.OnClickListener
 				else{
 					startActivity(new Intent(this, UserActivity.class));
 				}
-
 				break;
 			case R.id.tvRegisterLink:
 				startActivity(new Intent(this, CreateUser.class));

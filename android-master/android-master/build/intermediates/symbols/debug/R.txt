@@ -248,10 +248,11 @@ int id action_menu_presenter 0x7f0b0002
 int id action_mode_close_button 0x7f0b0024
 int id activity_chooser_view_content 0x7f0b0025
 int id always 0x7f0b0013
+int id b1 0x7f0b004c
 int id bAdd 0x7f0b0040
 int id bContinue 0x7f0b004b
-int id bLogin 0x7f0b004f
-int id bLogout 0x7f0b004d
+int id bLogin 0x7f0b0050
+int id bLogout 0x7f0b004e
 int id bRegister 0x7f0b0048
 int id beginning 0x7f0b000f
 int id checkbox 0x7f0b002d
@@ -284,7 +285,7 @@ int id image 0x7f0b0027
 int id listMode 0x7f0b0006
 int id list_item 0x7f0b0029
 int id middle 0x7f0b0011
-int id myoutput 0x7f0b004e
+int id myoutput 0x7f0b004f
 int id never 0x7f0b0016
 int id none 0x7f0b0012
 int id normal 0x7f0b0007
@@ -310,10 +311,10 @@ int id submit_area 0x7f0b0039
 int id tabMode 0x7f0b0008
 int id title 0x7f0b002b
 int id top_action_bar 0x7f0b0020
-int id tvAcquaintance 0x7f0b004c
+int id tvAcquaintance 0x7f0b004d
 int id tvCancel 0x7f0b0041
-int id tvForgotPassword 0x7f0b0051
-int id tvRegisterLink 0x7f0b0050
+int id tvForgotPassword 0x7f0b0052
+int id tvRegisterLink 0x7f0b0051
 int id up 0x7f0b0021
 int id useLogo 0x7f0b000e
 int id withText 0x7f0b0017

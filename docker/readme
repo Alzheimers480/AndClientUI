@@ -1,0 +1,11 @@
+This is the dockerization of a LAMP server.
+It uses 2 docker containers: db and web
+I made it easy to run: Just run ./refresh.sh from the docker shell
+#####
+Put your SQL code in sqlserver/data
+Put your web code in webserver/src
+
+Y'all are running windows, so you'll have to:
+Install docker toolbox (which include docker-machine)
+Always run docker commands in the docker shell
+Run `docker-machine ip` to see the IP of the running webserver

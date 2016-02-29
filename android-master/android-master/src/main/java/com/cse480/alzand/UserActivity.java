@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 public class UserActivity extends Activity implements View.OnClickListener{
 
-    Button bLogout;
-    TextView tvTakePic, tvRecord, tvAcquaintance;
+    Button bLogout, b1;
+    TextView tvAcquaintance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +19,11 @@ public class UserActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_user);
 
         bLogout = (Button) findViewById(R.id.bLogout);
-        tvTakePic = (TextView) findViewById(R.id.tvTakePic);
-        tvRecord = (TextView) findViewById(R.id.tvRecord);
+        b1 = (Button) findViewById(R.id.b1);
         tvAcquaintance = (TextView) findViewById(R.id.tvAcquaintance);
 
         bLogout.setOnClickListener(this);
+        b1.setOnClickListener(this);
         tvAcquaintance.setOnClickListener(this);
 
     }
@@ -34,11 +34,8 @@ public class UserActivity extends Activity implements View.OnClickListener{
             case R.id.bLogout:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-            case R.id.tvTakePic:
+            case R.id.b1:
                 //startActivity(new Intent(this, TakePicture.class)); Josh's cam classname needed
-                break;
-            case R.id.tvRecord:
-                //startActivity(new Intent(this, Record.class)); Josh's cam classname needed
                 break;
             case R.id.tvAcquaintance:
                     startActivity(new Intent(this, AddActivity.class));
