@@ -54,6 +54,45 @@
         android:layout_marginBottom="10dp"
         android:layout_height="wrap_content" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/IVP1"
+        android:layout_gravity="center_horizontal"
+        android:src="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Picture 1"
+        android:id="@+id/btnP1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/IVP2"
+        android:layout_gravity="center_horizontal"
+        android:src="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Picture 2"
+        android:id="@+id/btnP2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/IVP3"
+        android:layout_gravity="center_horizontal"
+        android:src="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Picture 3"
+        android:id="@+id/btnP3" />
+
     <Button
         android:id="@+id/bAdd"
         android:text="Add"
@@ -65,7 +104,7 @@
         android:id="@+id/tvCancel"
         android:layout_width="wrap_content"
         android:text="Cancel"
-        android:layout_gravity="bottom"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="right" />
 
 </LinearLayout>
