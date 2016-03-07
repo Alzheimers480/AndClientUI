@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Picture extends Activity{
-    Button b111;
+    Button b1;
     ImageView iv;
 
     @Override
@@ -47,10 +47,10 @@ public class Picture extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        b111 = (Button) findViewById(R.id.btnPicture);
+        b1 = (Button) findViewById(R.id.btnPicture);
         iv = (ImageView) findViewById(R.id.imageView);
 
-        b111.setOnClickListener(new View.OnClickListener() {
+        b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);

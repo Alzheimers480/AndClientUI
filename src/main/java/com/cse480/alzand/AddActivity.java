@@ -2,6 +2,7 @@ package com.cse480.alzand;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -19,17 +21,50 @@ import java.util.Scanner;
 
 public class AddActivity extends Activity implements View.OnClickListener{
 
-    Button bAdd;
+    Button bAdd, btnP1, btnP2, btnP3;
+    int iv = 0;
     EditText etFirstName, etLastName, etRelation, etMessage;
     TextView tvCancel;
     private HttpURLConnection urlConnection;
     String result = "";
+    ImageView IVP1, IVP2, IVP3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        btnP1 = (Button) findViewById(R.id.btnP1);
+        btnP1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iv = 1;
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
+        btnP2 = (Button) findViewById(R.id.btnP2);
+        btnP2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iv = 2;
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
+        btnP3 = (Button) findViewById(R.id.btnP3);
+        btnP3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iv = 3;
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
+        IVP1 = (ImageView) findViewById(R.id.IVP1);
+        IVP2 = (ImageView) findViewById(R.id.IVP2);
+        IVP3 = (ImageView) findViewById(R.id.IVP3);
         bAdd = (Button) findViewById(R.id.bAdd);
         etFirstName = (EditText) findViewById(R.id.etFirstName);
         etLastName = (EditText) findViewById(R.id.etLastName);
@@ -108,11 +143,33 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     startActivity(new Intent(this, AddActivity.class));
                 }
                 else{
-                    startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed for 5 pics
+                    //Send information to the server
                 }
                 break;
             case R.id.tvCancel:
                 startActivity(new Intent(this, UserActivity.class));
+                break;
+        }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bitmap bp = (Bitmap) data.getExtras().get("data");
+        switch(iv) {
+            case 0:
+                System.out.println("error");
+                break;
+            case 1:
+                IVP1.setImageBitmap(bp);
+                break;
+            case 2:
+                IVP2.setImageBitmap(bp);
+                break;
+            case 3:
+                IVP3.setImageBitmap(bp);
                 break;
         }
     }
