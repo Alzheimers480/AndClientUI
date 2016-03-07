@@ -23,6 +23,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
     Button bAdd, btnP1, btnP2, btnP3;
     int iv = 0;
+    String IFP1,IFP2,IFP3;
     EditText etFirstName, etLastName, etRelation, etMessage;
     TextView tvCancel;
     private HttpURLConnection urlConnection;
@@ -164,12 +165,15 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 break;
             case 1:
                 IVP1.setImageBitmap(bp);
+                IFP1 = data.getStringExtra("path");
                 break;
             case 2:
                 IVP2.setImageBitmap(bp);
+                IFP2 = data.getStringExtra("path");
                 break;
             case 3:
                 IVP3.setImageBitmap(bp);
+                IFP3 = data.getStringExtra("path");
                 break;
         }
     }
