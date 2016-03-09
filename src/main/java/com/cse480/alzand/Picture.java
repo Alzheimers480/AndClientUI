@@ -67,28 +67,26 @@ public class Picture extends Activity{
 
 
 	try{
-	 String IMGUR_CLIENT_ID = "...";
-	 MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 	 OkHttpClient client = new OkHttpClient();
+	 File picture = new File("/sdcard/testdata/test/s02/10.pgm");
+	 Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
 
-	    RequestBody requestBody = new MultipartBuilder()
-		.type(MultipartBuilder.FORM)
-		.addPart(
-			 Headers.of("Content-Disposition", "form-data; name=\"title\""),
-			 RequestBody.create(null, "Square Logo"))
-		.addPart(
-			 Headers.of("Content-Disposition", "form-data; name=\"image\""),
-			 RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
-		.build();
-	    Request request = new Request.Builder()
-		.header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
-		.url("https://api.imgur.com/3/image")
-		.post(requestBody)
-		.build();
+	 RequestBody requestBody = new MultipartBuilder()
+	     .type(MultipartBuilder.FORM)
+	     .addFormDataPart("USERNAME", "switch202")
+	     .addFormDataPart("pic", "10.pgm", RequestBody.create(MEDIA_TYPE_PGM, picture))
+	     .build();
+
+	 Request request = new Request.Builder()
+	     .url("http://141.210.25.46/predict.php")
+	     .post(requestBody)
+	     .build(); 
+
 	    Response response = client.newCall(request).execute();
 	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-	    System.out.println(response.body().string());
-	} catch (Exception e) {}}
+	    Log.w("alzand",response.body().string());
+	} catch (Exception e) {Log.w("alzand",e.toString());}}
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
