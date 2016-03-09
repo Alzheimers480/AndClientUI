@@ -104,8 +104,6 @@ public class MainActivity extends Activity implements View.OnClickListener
 						result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
 					}catch(Throwable e){}
 
-					//TextView outputTextView = (TextView)findViewById(R.id.myoutput);
-					//outputTextView.setText(inputStreamString);
 				}
 				catch(Exception ex){}
 
