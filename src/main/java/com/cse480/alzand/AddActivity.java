@@ -19,11 +19,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import java.io.File;
+import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore;
+import android.net.Uri;
+import java.io.ByteArrayOutputStream;
+
+
 public class AddActivity extends Activity implements View.OnClickListener{
 
     Button bAdd, btnP1, btnP2, btnP3;
     int iv = 0;
-    String IFP1,IFP2,IFP3;
+    File IFP1,IFP2,IFP3;
     EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
     private HttpURLConnection urlConnection, webConnection;
@@ -116,21 +124,28 @@ public class AddActivity extends Activity implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
 
         Bitmap bp = (Bitmap) data.getExtras().get("data");
+
         switch(iv) {
             case 0:
                 System.out.println("error");
                 break;
             case 1:
+                Uri tempUri1 = getImageUri(getApplicationContext(), bp);
                 IVP1.setImageBitmap(bp);
-                IFP1 = data.getStringExtra("path");
+                IFP1 = new File(getRealPathFromURI(tempUri1));
+                System.out.println(IFP1);
                 break;
             case 2:
+                Uri tempUri2 = getImageUri(getApplicationContext(), bp);
                 IVP2.setImageBitmap(bp);
-                IFP2 = data.getStringExtra("path");
+                IFP2 = new File(getRealPathFromURI(tempUri2));
+                System.out.println(IFP2);
                 break;
             case 3:
+                Uri tempUri3 = getImageUri(getApplicationContext(), bp);
                 IVP3.setImageBitmap(bp);
-                IFP3 = data.getStringExtra("path");
+                IFP3 = new File(getRealPathFromURI(tempUri3));
+                System.out.println(IFP3);
                 break;
         }
     }
@@ -187,8 +202,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     try {
                         OutputStream output = webConnection.getOutputStream();
                         output.write(urlParams.getBytes("UTF-8"));
-                    }
-                    catch(Exception ex){}
+                    } catch(Exception ex){}
 
                     InputStream response = webConnection.getInputStream();
                     //converts InputStream -> String
@@ -212,5 +226,19 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, UserActivity.class));
                 break;
         }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 }
