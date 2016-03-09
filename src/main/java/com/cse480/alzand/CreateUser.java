@@ -92,7 +92,7 @@ public class CreateUser extends Activity implements View.OnClickListener{
                     String urlParameters = "USERNAME=" + username + "&PASSWORD=" + password
                             + "&PASSWORD2=" + confirmPassword + "&FNAME=" + name
                             + "&LNAME=" + lname + "&EMAIL=" + email;
-                    URL website = new URL("http://www.secs.oakland.edu/~scnolton/newuser.php");
+                    URL website = new URL("141.210.25.46/newuser.php");
                     httpClient = (HttpURLConnection) website.openConnection();
 
                     httpClient.setDoOutput(true);

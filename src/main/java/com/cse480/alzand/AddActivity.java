@@ -24,12 +24,12 @@ public class AddActivity extends Activity implements View.OnClickListener{
     Button bAdd, btnP1, btnP2, btnP3;
     int iv = 0;
     String IFP1,IFP2,IFP3;
-    EditText etFirstName, etLastName, etRelation, etMessage;
+    EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
-    private HttpURLConnection urlConnection;
+    private HttpURLConnection urlConnection, webConnection;
     String result = "";
+    String result1 = "";
     ImageView IVP1, IVP2, IVP3;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
         bAdd = (Button) findViewById(R.id.bAdd);
         etFirstName = (EditText) findViewById(R.id.etFirstName);
         etLastName = (EditText) findViewById(R.id.etLastName);
+        etAcqID = (EditText) findViewById(R.id.etAcqid);
         etRelation = (EditText) findViewById(R.id.etRelation);
         etMessage = (EditText) findViewById(R.id.etMessage);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
@@ -76,6 +77,8 @@ public class AddActivity extends Activity implements View.OnClickListener{
         checkValidation();
         etFirstName.addTextChangedListener(tWatcher);
         etLastName.addTextChangedListener(tWatcher);
+        etAcqID.addTextChangedListener(tWatcher);
+        etRelation.addTextChangedListener(tWatcher);
 
         bAdd.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
@@ -83,7 +86,9 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
     private void checkValidation() {
         if (TextUtils.isEmpty(etFirstName.getText())
-                || TextUtils.isEmpty(etLastName.getText()))
+                || TextUtils.isEmpty(etLastName.getText())
+                || TextUtils.isEmpty(etAcqID.getText())
+                || TextUtils.isEmpty(etRelation.getText()))
             bAdd.setEnabled(false);
         else
             bAdd.setEnabled(true);
@@ -106,19 +111,47 @@ public class AddActivity extends Activity implements View.OnClickListener{
         }
     };
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bitmap bp = (Bitmap) data.getExtras().get("data");
+        switch(iv) {
+            case 0:
+                System.out.println("error");
+                break;
+            case 1:
+                IVP1.setImageBitmap(bp);
+                IFP1 = data.getStringExtra("path");
+                break;
+            case 2:
+                IVP2.setImageBitmap(bp);
+                IFP2 = data.getStringExtra("path");
+                break;
+            case 3:
+                IVP3.setImageBitmap(bp);
+                IFP3 = data.getStringExtra("path");
+                break;
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bAdd:
                 String fName = etFirstName.getText().toString();
                 String lName = etLastName.getText().toString();
+                String aqID = etAcqID.getText().toString();
                 String relation = etRelation.getText().toString();
                 String message = etMessage.getText().toString();
+
+                MainActivity mainActivity = new MainActivity();
+                String username = mainActivity.getUserName();
+
                 try
                 {
-                    String urlParameters = "FNAME=" + fName + "&LNAME=" + lName
-                            + "&RELATION=" + relation + "&MESSAGE=" + message;
-                    URL website = new URL("http://www.secs.oakland.edu/~scnolton/newacqu.php");
+                    String urlParameters = "USERNAME=" + username + "&FNAME=" + fName + "&LNAME=" + lName;
+                    URL website = new URL("141.210.25.46/newacqu.php");
                     urlConnection = (HttpURLConnection) website.openConnection();
 
                     urlConnection.setDoOutput(true);
@@ -140,40 +173,43 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 }
                 catch (Exception e){}
 
-                if(result.equals("False")){
+
+                try
+                {
+                    String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message
+                            + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
+                    URL web = new URL("141.210.25.46/relate.php");
+                    webConnection = (HttpURLConnection) web.openConnection();
+
+                    webConnection.setDoOutput(true);
+                    webConnection.setRequestProperty("Accept-Charset", "UTF-8");
+                    webConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+                    try {
+                        OutputStream output = webConnection.getOutputStream();
+                        output.write(urlParams.getBytes("UTF-8"));
+                    }
+                    catch(Exception ex){}
+
+                    InputStream response = webConnection.getInputStream();
+                    //converts InputStream -> String
+                    String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
+
+                    try {
+                        result1 = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
+                    }catch(Throwable e){}
+                }
+                catch (Exception e){}
+
+
+                if(result.equals("False") || result1.equals("False")){
                     startActivity(new Intent(this, AddActivity.class));
                 }
                 else{
-                    //Send information to the server
+                    startActivity(new Intent(this, UserActivity.class));
                 }
                 break;
             case R.id.tvCancel:
                 startActivity(new Intent(this, UserActivity.class));
-                break;
-        }
-    }
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Bitmap bp = (Bitmap) data.getExtras().get("data");
-        switch(iv) {
-            case 0:
-                System.out.println("error");
-                break;
-            case 1:
-                IVP1.setImageBitmap(bp);
-                IFP1 = data.getStringExtra("path");
-                break;
-            case 2:
-                IVP2.setImageBitmap(bp);
-                IFP2 = data.getStringExtra("path");
-                break;
-            case 3:
-                IVP3.setImageBitmap(bp);
-                IFP3 = data.getStringExtra("path");
                 break;
         }
     }
