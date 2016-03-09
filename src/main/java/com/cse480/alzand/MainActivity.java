@@ -25,6 +25,7 @@ public class MainActivity extends Activity implements View.OnClickListener
     private HttpURLConnection httpClient;
 	String result="";
 	String result2="";
+	String username="";
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -46,7 +47,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 		tvRegisterLink.setOnClickListener(this);
 		tvForgotPassword.setOnClickListener(this);
 
-	
+		username = etUsername.getText().toString();
     }
 
 	private void checkValidation() {
@@ -74,6 +75,10 @@ public class MainActivity extends Activity implements View.OnClickListener
 		}
 	};
 
+	public String getUserName(){
+		return username;
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -84,7 +89,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 				try
 				{
 					String urlParameters = "USERNAME=" + username+ "&PASSWORD=" + password;
-					URL website = new URL("http://www.secs.oakland.edu/~scnolton/auth.php");
+					URL website = new URL("141.210.25.46/auth.php");
 					httpClient = (HttpURLConnection) website.openConnection();
 
 					httpClient.setDoOutput(true);
@@ -113,7 +118,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 				try
 				{
 					String param = "USERNAME=" + username;
-					URL url = new URL("http://www.secs.oakland.edu/~scnolton/var.php");
+					URL url = new URL("141.210.25.46/var.php");
 					httpClient = (HttpURLConnection) url.openConnection();
 
 					httpClient.setDoOutput(true);
