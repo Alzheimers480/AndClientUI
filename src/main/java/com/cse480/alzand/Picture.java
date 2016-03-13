@@ -108,7 +108,7 @@ public class Picture extends Activity{
 	     .build();
 
 	 Request request = new Request.Builder()
-	     .url("http://141.210.25.46/predict.php")
+	     .url(MainActivity.serverUrl+"predict.php")
 	     .post(requestBody)
 	     .build();
 
