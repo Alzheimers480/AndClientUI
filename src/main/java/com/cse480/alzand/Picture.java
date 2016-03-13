@@ -70,30 +70,27 @@ public class Picture extends Activity{
 		    }
 		}
 	    });
-	
-	
         b1 = (Button) findViewById(R.id.btnPicture);
         iv = (ImageView) findViewById(R.id.imageView);
 	
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
+		predictPic();
             }
 	});
 
 
 	try{
-	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/png");
+	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 	 OkHttpClient client = new OkHttpClient();
-	 File picture = new File("/sdcard/my.png");
+	 File picture = new File("/sdcard/testdata/test/s01/7.pgm");
 	 Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
 
 	 RequestBody requestBody = new MultipartBuilder()
 	     .type(MultipartBuilder.FORM)
 	     .addFormDataPart("USERNAME", "switch202")
-	     .addFormDataPart("pic", "my.png", RequestBody.create(MEDIA_TYPE_PGM, picture))
+	     .addFormDataPart("pic", "7.pgm", RequestBody.create(MEDIA_TYPE_PGM, picture))
 	     .build();
 
 	 Request request = new Request.Builder()
@@ -106,9 +103,8 @@ public class Picture extends Activity{
 	 resString = response.body().string();
 	 String delims = "[=>|\n]";
 	 String[] tokens = resString.split(delims);
-	 /*for(int i=0;i<tokens.length;i++)
+	 for(int i=0;i<tokens.length;i++)
 	     Log.w("alzand","token "+i+" = "+tokens[i]);
-	 */
 	 
 	 acqName = tokens[4]+tokens[7];
 	 relation = tokens[10];
@@ -122,29 +118,18 @@ public class Picture extends Activity{
 	}
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bp = (Bitmap) data.getExtras().get("data");
-        iv.setImageBitmap(bp);
-
-	FileOutputStream out = null;
+    protected void predictPic() {
+	Bitmap bp = null;
 	try {
-	    out = new FileOutputStream("/sdcard/out.png");
-	    bp.compress(Bitmap.CompressFormat.PNG, 100, out);
+	    bp = BitmapFactory.decodeFile("/sdcard/testdata/test/s01/7.pgm");
+	    iv.setImageBitmap(bp);
 	} catch (Exception e) {
-	    Log.w("alzand",e.toString());
-	} finally {
-	    try {
-		if (out != null) {
-		    out.close();
-		}
-	    } catch (IOException e) {
-		Log.w("alzand",e.toString());
-	    }
+	    Log.w("alzand","tried to png "+e.toString());
 	}
 
-	tts.speak(acqName,TextToSpeech.QUEUE_ADD,null);
+	tts.speak("This is "+acqName+".",TextToSpeech.QUEUE_ADD,null);
+	tts.speak("They are your "+relation+".",TextToSpeech.QUEUE_ADD,null);
+	tts.speak(message+".",TextToSpeech.QUEUE_ADD,null);
     }
 
     @Override
