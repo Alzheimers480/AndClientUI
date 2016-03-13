@@ -54,6 +54,7 @@ public class Picture extends Activity{
     String acqName;
     String relation;
     String message;
+    Bitmap bp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,6 @@ public class Picture extends Activity{
 		    if(status == TextToSpeech.SUCCESS) {
 			tts.setLanguage(Locale.US);
 			Log.w("alzand","tts init");
-			tts.speak("hello david",TextToSpeech.QUEUE_ADD,null);
 		    }
 		}
 	    });
@@ -79,29 +79,21 @@ public class Picture extends Activity{
 		predictPic();
             }
 	});
-    }
 
-    protected void predictPic() {
-	Bitmap bp = null;
-	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-	
-	try {
+		try {
 	    bp = BitmapFactory.decodeFile("/sdcard/7.bmp");
-	    //bp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-	    //File imgOut = new File("/sdcard/myout.jpg");
-	    //imgOut.createNewFile();
-	    //FileOutputStream fo = new FileOutputStream(imgOut);
-	    //fo.write(bytes.toByteArray());
-	    //fo.close();
 	    iv.setImageBitmap(bp);
 	} catch (Exception e) {
-	    Log.w("alzand","tried to png "+e.toString());
+	    Log.w("alzand","tried to read file "+e.toString());
 	    StringWriter sw = new StringWriter();
 	    PrintWriter pw = new PrintWriter(sw);
 	    e.printStackTrace(pw);
 	    Log.w("alzand",sw.toString()); // stack trace as a string
 	}
 	Log.w("alzand"," png block done ");
+    }
+
+    protected void predictPic() {
 
 	try{
 	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
