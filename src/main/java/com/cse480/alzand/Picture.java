@@ -43,16 +43,32 @@ import java.io.File;
 import android.util.Log;
 import com.squareup.okhttp.*;
 import java.io.*;
+import android.speech.tts.TextToSpeech;
+import java.util.Locale;
 
 public class Picture extends Activity{
     Button b1;
     ImageView iv;
+    TextToSpeech tts;
+    String resString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
+	tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+		@Override
+		public void onInit(int status) {
+		    if(status == TextToSpeech.SUCCESS) {
+			tts.setLanguage(Locale.US);
+			Log.w("alzand","tts init");
+			tts.speak("hello david",TextToSpeech.QUEUE_ADD,null);
+		    }
+		}
+	    });
+	
+	
         b1 = (Button) findViewById(R.id.btnPicture);
         iv = (ImageView) findViewById(R.id.imageView);
 	
@@ -83,8 +99,11 @@ public class Picture extends Activity{
 	     .build();
 
 	 Response response = client.newCall(request).execute();
-	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-	    Log.w("alzand",response.body().string());
+	 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+	 resString = response.body().string();
+	 Log.w("alzand",resString);
+	 
+	 tts.speak("hello name",TextToSpeech.QUEUE_ADD,null);
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
