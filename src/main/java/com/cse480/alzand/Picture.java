@@ -61,39 +61,56 @@ public class Picture extends Activity{
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, 0);
-		
             }
-	    });
+	});
 
 
 	try{
-	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
+	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/png");
 	 OkHttpClient client = new OkHttpClient();
-	 File picture = new File("/sdcard/testdata/test/s02/10.pgm");
+	 File picture = new File("/sdcard/my.png");
 	 Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
 
 	 RequestBody requestBody = new MultipartBuilder()
 	     .type(MultipartBuilder.FORM)
 	     .addFormDataPart("USERNAME", "switch202")
-	     .addFormDataPart("pic", "10.pgm", RequestBody.create(MEDIA_TYPE_PGM, picture))
+	     .addFormDataPart("pic", "my.png", RequestBody.create(MEDIA_TYPE_PGM, picture))
 	     .build();
 
 	 Request request = new Request.Builder()
 	     .url("http://141.210.25.46/predict.php")
 	     .post(requestBody)
-	     .build(); 
+	     .build();
 
-	    Response response = client.newCall(request).execute();
+	 Response response = client.newCall(request).execute();
 	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 	    Log.w("alzand",response.body().string());
-	} catch (Exception e) {Log.w("alzand",e.toString());}}
+	} catch (Exception e) {
+	    Log.w("alzand",e.toString());
+	}
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
         Bitmap bp = (Bitmap) data.getExtras().get("data");
         iv.setImageBitmap(bp);
+
+	FileOutputStream out = null;
+	try {
+	    out = new FileOutputStream("/sdcard/out.png");
+	    bp.compress(Bitmap.CompressFormat.PNG, 100, out);
+	} catch (Exception e) {
+	    Log.w("alzand",e.toString());
+	} finally {
+	    try {
+		if (out != null) {
+		    out.close();
+		}
+	    } catch (IOException e) {
+		Log.w("alzand",e.toString());
+	    }
+	}
     }
 
     @Override
