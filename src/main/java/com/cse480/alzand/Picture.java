@@ -79,18 +79,40 @@ public class Picture extends Activity{
 		predictPic();
             }
 	});
+    }
 
+    protected void predictPic() {
+	Bitmap bp = null;
+	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	
+	try {
+	    bp = BitmapFactory.decodeFile("/sdcard/7.bmp");
+	    //bp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+	    //File imgOut = new File("/sdcard/myout.jpg");
+	    //imgOut.createNewFile();
+	    //FileOutputStream fo = new FileOutputStream(imgOut);
+	    //fo.write(bytes.toByteArray());
+	    //fo.close();
+	    iv.setImageBitmap(bp);
+	} catch (Exception e) {
+	    Log.w("alzand","tried to png "+e.toString());
+	    StringWriter sw = new StringWriter();
+	    PrintWriter pw = new PrintWriter(sw);
+	    e.printStackTrace(pw);
+	    Log.w("alzand",sw.toString()); // stack trace as a string
+	}
+	Log.w("alzand"," png block done ");
 
 	try{
 	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 	 OkHttpClient client = new OkHttpClient();
-	 File picture = new File("/sdcard/testdata/test/s01/7.pgm");
+	 File picture = new File("/sdcard/7.bmp");
 	 Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
 
 	 RequestBody requestBody = new MultipartBuilder()
 	     .type(MultipartBuilder.FORM)
 	     .addFormDataPart("USERNAME", "switch202")
-	     .addFormDataPart("pic", "7.pgm", RequestBody.create(MEDIA_TYPE_PGM, picture))
+	     .addFormDataPart("pic", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
 	     .build();
 
 	 Request request = new Request.Builder()
@@ -116,17 +138,7 @@ public class Picture extends Activity{
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
-    }
-
-    protected void predictPic() {
-	Bitmap bp = null;
-	try {
-	    bp = BitmapFactory.decodeFile("/sdcard/testdata/test/s01/7.pgm");
-	    iv.setImageBitmap(bp);
-	} catch (Exception e) {
-	    Log.w("alzand","tried to png "+e.toString());
-	}
-
+	
 	tts.speak("This is "+acqName+".",TextToSpeech.QUEUE_ADD,null);
 	tts.speak("They are your "+relation+".",TextToSpeech.QUEUE_ADD,null);
 	tts.speak(message+".",TextToSpeech.QUEUE_ADD,null);
