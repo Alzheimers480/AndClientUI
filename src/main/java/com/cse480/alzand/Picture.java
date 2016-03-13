@@ -51,6 +51,9 @@ public class Picture extends Activity{
     ImageView iv;
     TextToSpeech tts;
     String resString;
+    String acqName;
+    String relation;
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +104,19 @@ public class Picture extends Activity{
 	 Response response = client.newCall(request).execute();
 	 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 	 resString = response.body().string();
-	 Log.w("alzand",resString);
+	 String delims = "[=>|\n]";
+	 String[] tokens = resString.split(delims);
+	 /*for(int i=0;i<tokens.length;i++)
+	     Log.w("alzand","token "+i+" = "+tokens[i]);
+	 */
 	 
-	 tts.speak("hello name",TextToSpeech.QUEUE_ADD,null);
+	 acqName = tokens[4]+tokens[7];
+	 relation = tokens[10];
+	 message = tokens[13];
+	 Log.w("alzand","Name: "+acqName);
+	 Log.w("alzand","Relation: "+relation);
+	 Log.w("alzand","Message: "+message);
+	 
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
@@ -130,6 +143,8 @@ public class Picture extends Activity{
 		Log.w("alzand",e.toString());
 	    }
 	}
+
+	tts.speak(acqName,TextToSpeech.QUEUE_ADD,null);
     }
 
     @Override
