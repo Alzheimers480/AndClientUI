@@ -3,3 +3,6 @@ build
 .idea
 out
 testdata
+*.pgm
+*.png
+*.bmp
