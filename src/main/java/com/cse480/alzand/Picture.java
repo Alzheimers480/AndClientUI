@@ -55,6 +55,7 @@ public class Picture extends Activity{
     String relation;
     String message;
     Bitmap bp;
+    TextView txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class Picture extends Activity{
 	    });
         b1 = (Button) findViewById(R.id.btnPicture);
         iv = (ImageView) findViewById(R.id.imageView);
+	txt = (TextView) findViewById(R.id.infout);
 	
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,10 +132,11 @@ public class Picture extends Activity{
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
+
+	String speach = "This is "+acqName+". They are your "+relation+"."+message;
 	
-	tts.speak("This is "+acqName+".",TextToSpeech.QUEUE_ADD,null);
-	tts.speak("They are your "+relation+".",TextToSpeech.QUEUE_ADD,null);
-	tts.speak(message+".",TextToSpeech.QUEUE_ADD,null);
+	txt.setText(speach);
+	tts.speak(speach,TextToSpeech.QUEUE_ADD,null);
     }
 
     @Override
