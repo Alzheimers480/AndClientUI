@@ -3,6 +3,7 @@ package com.cse480.alzand;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,26 +13,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.net.Uri;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-import java.io.File;
-import android.content.Context;
-import android.database.Cursor;
-import android.provider.MediaStore;
-import android.net.Uri;
-import java.io.ByteArrayOutputStream;
-
 
 public class AddActivity extends Activity implements View.OnClickListener{
 
     Button bAdd, btnP1, btnP2, btnP3;
     int iv = 0;
-    File IFP1,IFP2,IFP3;
+    Uri IFP1,IFP2,IFP3;
     EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
     private HttpURLConnection urlConnection, webConnection;
@@ -123,6 +117,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
+        System.out.println(data.getData().getPath());
         Bitmap bp = (Bitmap) data.getExtras().get("data");
 
         switch(iv) {
@@ -130,22 +125,20 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 System.out.println("error");
                 break;
             case 1:
-                Uri tempUri1 = getImageUri(getApplicationContext(), bp);
+
                 IVP1.setImageBitmap(bp);
-                IFP1 = new File(getRealPathFromURI(tempUri1));
-                System.out.println(IFP1);
+                IFP1 = data.getData();
                 break;
+
             case 2:
-                Uri tempUri2 = getImageUri(getApplicationContext(), bp);
+
                 IVP2.setImageBitmap(bp);
-                IFP2 = new File(getRealPathFromURI(tempUri2));
-                System.out.println(IFP2);
+                IFP2 = data.getData();
                 break;
             case 3:
-                Uri tempUri3 = getImageUri(getApplicationContext(), bp);
+
                 IVP3.setImageBitmap(bp);
-                IFP3 = new File(getRealPathFromURI(tempUri3));
-                System.out.println(IFP3);
+                IFP3 = data.getData();
                 break;
         }
     }
@@ -228,17 +221,5 @@ public class AddActivity extends Activity implements View.OnClickListener{
         }
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
 
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-    }
 }
