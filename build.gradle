@@ -18,7 +18,13 @@ android {
             proguardFile getDefaultProguardFile('proguard-android.txt')
         }
     }
-}
-dependencies {
-    compile 'com.android.support:appcompat-v7:19.+'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        //compile 'com.squareup.okhttp3:okhttp:3.2.0'
+	compile 'com.squareup.okhttp:okhttp:2.2.0'
+    }
 }

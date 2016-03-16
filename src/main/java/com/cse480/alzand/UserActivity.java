@@ -24,7 +24,6 @@ public class UserActivity extends Activity implements View.OnClickListener{
         bLogout.setOnClickListener(this);
         b1.setOnClickListener(this);
         tvAcquaintance.setOnClickListener(this);
-
     }
 
     @Override
@@ -37,7 +36,7 @@ public class UserActivity extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed
                 break;
             case R.id.tvAcquaintance:
-                    startActivity(new Intent(this, AddActivity.class));
+                startActivity(new Intent(this, AddActivity.class));
                 break;
         }
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -159,7 +160,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 try
                 {
                     String urlParameters = "USERNAME=" + username + "&FNAME=" + fName + "&LNAME=" + lName;
-                    URL website = new URL("141.210.25.46/newacqu.php");
+                    URL website = new URL(MainActivity.serverUrl+"newacqu.php");
                     urlConnection = (HttpURLConnection) website.openConnection();
 
                     urlConnection.setDoOutput(true);
@@ -169,7 +170,9 @@ public class AddActivity extends Activity implements View.OnClickListener{
                         OutputStream output = urlConnection.getOutputStream();
                         output.write(urlParameters.getBytes("UTF-8"));
                     }
-                    catch(Exception ex){}
+                    catch(Exception ex){
+                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+                    }
 
                     InputStream response = urlConnection.getInputStream();
                     //converts InputStream -> String
@@ -177,16 +180,20 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
                     try {
                         result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
-                    }catch(Throwable e){}
+                    }catch(Throwable ex){
+                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+                    }
                 }
-                catch (Exception e){}
+                catch (Exception ex){
+                    Log.w("alzand", ex.toString() + " " + Thread.currentThread().getStackTrace().toString());
+                }
 
 
                 try
                 {
                     String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message
                             + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
-                    URL web = new URL("141.210.25.46/relate.php");
+                    URL web = new URL(MainActivity.serverUrl+"relate.php");
                     webConnection = (HttpURLConnection) web.openConnection();
 
                     webConnection.setDoOutput(true);
@@ -195,7 +202,10 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     try {
                         OutputStream output = webConnection.getOutputStream();
                         output.write(urlParams.getBytes("UTF-8"));
-                    } catch(Exception ex){}
+                    }
+                    catch(Exception ex){
+                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+                    }
 
                     InputStream response = webConnection.getInputStream();
                     //converts InputStream -> String
@@ -203,9 +213,13 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
                     try {
                         result1 = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
-                    }catch(Throwable e){}
+                    }catch(Throwable ex){
+                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+                    }
                 }
-                catch (Exception e){}
+                catch (Exception ex){
+                    Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+                }
 
 
                 if(result.equals("False") || result1.equals("False")){

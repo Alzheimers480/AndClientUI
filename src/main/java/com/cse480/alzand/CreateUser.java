@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,7 +93,7 @@ public class CreateUser extends Activity implements View.OnClickListener{
                     String urlParameters = "USERNAME=" + username + "&PASSWORD=" + password
                             + "&PASSWORD2=" + confirmPassword + "&FNAME=" + name
                             + "&LNAME=" + lname + "&EMAIL=" + email;
-                    URL website = new URL("141.210.25.46/newuser.php");
+                    URL website = new URL(MainActivity.serverUrl+"newuser.php");
                     httpClient = (HttpURLConnection) website.openConnection();
 
                     httpClient.setDoOutput(true);
@@ -102,7 +103,9 @@ public class CreateUser extends Activity implements View.OnClickListener{
                         OutputStream output = httpClient.getOutputStream();
                         output.write(urlParameters.getBytes("UTF-8"));
                     }
-                    catch(Exception ex){}
+                    catch(Exception ex){
+                        Log.w("alzand", ex.toString() + " " + Thread.currentThread().getStackTrace().toString());
+                    }
 
                     //modify the lines dealing with InputStream
                     InputStream response = httpClient.getInputStream();
@@ -115,7 +118,9 @@ public class CreateUser extends Activity implements View.OnClickListener{
                         startActivity(new Intent(this, UserActivity.class));
                     }
                 }
-                catch(Exception ex){}
+                catch(Exception ex){
+                    Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+                }
 
                 startActivity(new Intent(this, UserActivity.class));
                 break;

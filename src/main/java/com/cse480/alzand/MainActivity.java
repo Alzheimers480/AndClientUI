@@ -10,6 +10,7 @@ import java.net.*;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import java.io.*;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
     //private HttpClient httpclient;
     private HttpURLConnection httpClient;
+	static String serverUrl = "http://141.210.25.46/";
 	String result="";
 	String result2="";
 	String username="";
@@ -30,6 +32,7 @@ public class MainActivity extends Activity implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+		Log.w("alzand", "Begin");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -89,9 +92,9 @@ public class MainActivity extends Activity implements View.OnClickListener
 				try
 				{
 					String urlParameters = "USERNAME=" + username+ "&PASSWORD=" + password;
-					URL website = new URL("141.210.25.46/auth.php");
+					URL website = new URL(serverUrl+"auth.php");
 					httpClient = (HttpURLConnection) website.openConnection();
-
+					httpClient.setRequestProperty("connection", "close");
 					httpClient.setDoOutput(true);
 					httpClient.setRequestProperty("Accept-Charset", "UTF-8");
 					httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
@@ -99,7 +102,9 @@ public class MainActivity extends Activity implements View.OnClickListener
 						OutputStream output = httpClient.getOutputStream();
 						output.write(urlParameters.getBytes("UTF-8"));
 					}
-					catch(Exception ex){}
+					catch(Exception ex){
+						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+					}
 
 					InputStream response = httpClient.getInputStream();
 					//converts InputStream -> String
@@ -107,20 +112,23 @@ public class MainActivity extends Activity implements View.OnClickListener
 
 					try {
 						result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
-					}catch(Throwable e){}
+						Log.w("alzand", result);
+					}catch(Exception ex){
+						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+					}
 
-					//TextView outputTextView = (TextView)findViewById(R.id.myoutput);
-					//outputTextView.setText(inputStreamString);
 				}
-				catch(Exception ex){}
+				catch(Exception ex){
+					Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+				}
 
 
 				try
 				{
 					String param = "USERNAME=" + username;
-					URL url = new URL("141.210.25.46/var.php");
+					URL url = new URL(serverUrl+"var.php");
 					httpClient = (HttpURLConnection) url.openConnection();
-
+					httpClient.setRequestProperty("connection", "close");
 					httpClient.setDoOutput(true);
 					httpClient.setRequestProperty("Accept-Charset", "UTF-8");
 					httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
@@ -128,7 +136,9 @@ public class MainActivity extends Activity implements View.OnClickListener
 						OutputStream output = httpClient.getOutputStream();
 						output.write(param.getBytes("UTF-8"));
 					}
-					catch(Exception ex){}
+					catch(Exception ex){
+						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+					}
 
 					InputStream response = httpClient.getInputStream();
 					//converts InputStream -> String
@@ -136,10 +146,14 @@ public class MainActivity extends Activity implements View.OnClickListener
 
 					try {
 						result2 = inputStreamString.toString();
-					}catch(Throwable e){}
+					}catch(Exception ex){
+						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+					}
 
 				}
-				catch(Exception ex){}
+				catch(Exception ex){
+					Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
+				}
 
 				if(result.equals("False") || result2.equals("0")){
 					startActivity(new Intent(this, MainActivity.class));
