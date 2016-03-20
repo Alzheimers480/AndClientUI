@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 public class UserActivity extends Activity implements View.OnClickListener{
 
-    Button bLogout, b1;
-    TextView tvAcquaintance;
+    Button bLogout, b1, bAddAcquaintance;
+    //TextView tvAcquaintance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +19,13 @@ public class UserActivity extends Activity implements View.OnClickListener{
 
         bLogout = (Button) findViewById(R.id.bLogout);
         b1 = (Button) findViewById(R.id.b1);
-        tvAcquaintance = (TextView) findViewById(R.id.tvAcquaintance);
+        bAddAcquaintance = (Button) findViewById(R.id.bAddAcquaintance);
+        //tvAcquaintance = (TextView) findViewById(R.id.tvAcquaintance);
 
         bLogout.setOnClickListener(this);
         b1.setOnClickListener(this);
-        tvAcquaintance.setOnClickListener(this);
+        bAddAcquaintance.setOnClickListener(this);
+        //tvAcquaintance.setOnClickListener(this);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class UserActivity extends Activity implements View.OnClickListener{
             case R.id.b1:
                 startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed
                 break;
-            case R.id.tvAcquaintance:
+            case R.id.bAddAcquaintance:
                 startActivity(new Intent(this, AddActivity.class));
                 break;
         }

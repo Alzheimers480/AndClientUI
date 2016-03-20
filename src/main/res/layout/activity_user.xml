@@ -8,26 +8,29 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/blue"
     tools:context="com.cse480.alzand.UserActivity">
 
     <Button
         android:id="@+id/b1"
         android:text="Camera"
+        android:textColor="@android:color/white"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvAcquaintance"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/bAddAcquaintance"
+        android:layout_width="match_parent"
         android:text="Add Acquaintance"
-        android:textStyle="bold"
+        android:textColor="@android:color/white"
         android:layout_marginBottom="80dp"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/bLogout"
         android:text="Log Out"
+        android:textColor="@android:color/white"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -10,6 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/blue"
     tools:context="com.cse480.alzand.AddActivity">
 
     <ScrollView
@@ -22,6 +23,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:text="First Name"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content" />
 
     <EditText
@@ -33,6 +35,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:text="Last Name"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content" />
 
     <EditText
@@ -44,6 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="Acquaintance ID"
+                android:textColor="@android:color/white"
                 android:layout_height="wrap_content" />
 
             <EditText
@@ -55,6 +59,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:text="Relation"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content" />
 
     <EditText
@@ -66,6 +71,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:text="Message"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content" />
 
     <EditText
@@ -78,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Picture 1"
+                android:textColor="@android:color/white"
         android:id="@+id/btnP1" />
 
             <ImageView
@@ -92,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Picture 2"
+                android:textColor="@android:color/white"
         android:id="@+id/btnP2" />
 
             <ImageView
@@ -105,6 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Picture 3"
+                android:textColor="@android:color/white"
         android:id="@+id/btnP3" />
 
             <ImageView
@@ -117,6 +126,7 @@
             <Button
         android:id="@+id/bAdd"
         android:text="Add"
+                android:textColor="@android:color/white"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -125,6 +135,7 @@
         android:id="@+id/tvCancel"
         android:layout_width="wrap_content"
         android:text="Cancel"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content"
         android:layout_gravity="right" />
 
