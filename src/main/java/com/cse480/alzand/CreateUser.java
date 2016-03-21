@@ -112,17 +112,17 @@ public class CreateUser extends Activity implements View.OnClickListener{
                     //converts InputStream -> String
                     String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
                     if(inputStreamString.equals("False")){
-                        startActivity(new Intent(this, MainActivity.class));
+                        startActivity(new Intent(this, CreateUser.class));
                     }
                     else{
-                        startActivity(new Intent(this, UserActivity.class));
+                        startActivity(new Intent(this, MainActivity.class));
                     }
                 }
                 catch(Exception ex){
                     Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
                 }
 
-                startActivity(new Intent(this, UserActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }
