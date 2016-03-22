@@ -30,8 +30,8 @@ public class AddActivity extends Activity implements View.OnClickListener{
     EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
     private HttpURLConnection urlConnection, webConnection;
-    String result = "";
-    String result1 = "";
+    String result = "False";
+    String result1 = "False";
     ImageView IVP1, IVP2, IVP3;
 
     @Override
@@ -191,8 +191,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
                 try
                 {
-                    String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message
-                            + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
+                    String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message;
                     URL web = new URL(MainActivity.serverUrl+"relate.php");
                     webConnection = (HttpURLConnection) web.openConnection();
 
@@ -212,7 +211,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
 
                     try {
-                        result1 = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
+                        result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
                     }catch(Throwable ex){
                         Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
                     }
