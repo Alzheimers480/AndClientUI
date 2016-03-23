@@ -46,6 +46,8 @@ import java.io.*;
 import android.speech.tts.TextToSpeech;
 import java.util.Locale;
 
+import org.json.*;
+
 public class Picture extends Activity{
     Button b1;
     ImageView iv;
@@ -54,6 +56,7 @@ public class Picture extends Activity{
     String acqName;
     String relation;
     String message;
+    String distance;
     Bitmap bp;
     TextView txt;
 
@@ -117,25 +120,22 @@ public class Picture extends Activity{
 	 Response response = client.newCall(request).execute();
 	 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 	 resString = response.body().string();
-	 String delims = "[=>|\n]";
-	 String[] tokens = resString.split(delims);
-	 for(int i=0;i<tokens.length;i++)
-	     Log.w("alzand","token "+i+" = "+tokens[i]);
+
 	 
-	 acqName = tokens[4]+tokens[7];
-	 relation = tokens[10];
-	 message = tokens[13];
-	 Log.w("alzand","Name: "+acqName);
-	 Log.w("alzand","Relation: "+relation);
-	 Log.w("alzand","Message: "+message);
 	 
+	 Log.w("alzand","Response string :"+resString);
+	 JSONObject jObject = new JSONObject(resString);
+	 acqName = jObject.getString("ACQUAINTANCE_FNAME")+" "+jObject.getString("ACQUAINTANCE_LNAME");
+	 relation = jObject.getString("RELATION");
+	 message = jObject.getString("DESCRIPTION");
+	 distance = jObject.getString("DISTANCE");
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
 
 	String speach = "This is "+acqName+". They are your "+relation+"."+message;
-	
-	txt.setText(speach);
+
+	txt.setText(speach+"The distance is "+distance);
 	tts.speak(speach,TextToSpeech.QUEUE_ADD,null);
     }
 
