@@ -191,7 +191,8 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
                 try
                 {
-                    String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message;
+                    String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message
+                            + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
                     URL web = new URL(MainActivity.serverUrl+"relate.php");
                     webConnection = (HttpURLConnection) web.openConnection();
 
@@ -233,6 +234,4 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 break;
         }
     }
-
-
 }
