@@ -6,3 +6,4 @@ testdata
 *.pgm
 *.png
 *.bmp
+local.properties
