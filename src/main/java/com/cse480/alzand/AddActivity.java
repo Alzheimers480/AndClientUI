@@ -159,7 +159,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
                 try
                 {
-                    String urlParameters = "USERNAME=" + username + "&FNAME=" + fName + "&LNAME=" + lName;
+                    String urlParameters = "USERNAME=" + aqID + "&FNAME=" + fName + "&LNAME=" + lName;
                     URL website = new URL(MainActivity.serverUrl+"newacqu.php");
                     urlConnection = (HttpURLConnection) website.openConnection();
 
