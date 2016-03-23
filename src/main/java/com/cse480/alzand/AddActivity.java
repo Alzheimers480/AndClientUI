@@ -180,6 +180,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
                     try {
                         result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
+                        Log.w("alzand", result+" tatda");
                     }catch(Throwable ex){
                         Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
                     }
@@ -212,7 +213,8 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
 
                     try {
-                        result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+                        result1 = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
+                        Log.w("alzand", result1);
                     }catch(Throwable ex){
                         Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
                     }
