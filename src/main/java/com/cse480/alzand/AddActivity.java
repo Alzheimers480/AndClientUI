@@ -3,7 +3,6 @@ package com.cse480.alzand;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -33,9 +32,14 @@ public class AddActivity extends Activity implements View.OnClickListener{
     String result = "False";
     String result1 = "False";
     ImageView IVP1, IVP2, IVP3;
+    String username= "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Bundle bundle = getIntent().getExtras();
+        username = bundle.getString("USER_UID");
+        Log.w("alzand", username+" wooowowowow");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
@@ -154,13 +158,10 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 String relation = etRelation.getText().toString();
                 String message = etMessage.getText().toString();
 
-                MainActivity mainActivity = new MainActivity();
-                String username = mainActivity.getUserName();
-
                 try
                 {
                     String urlParameters = "USERNAME=" + aqID + "&FNAME=" + fName + "&LNAME=" + lName;
-                    URL website = new URL(MainActivity.serverUrl+"newacqu.php");
+                    URL website = new URL(LoginPage.serverUrl+"newacqu.php");
                     urlConnection = (HttpURLConnection) website.openConnection();
 
                     urlConnection.setDoOutput(true);
@@ -179,8 +180,9 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
 
                     try {
-                        result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
-                        Log.w("alzand", result+" tatda");
+                        result = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+                        Log.w("alzand", inputStreamString+" newacqu");
+                        Log.w("alzand", result);
                     }catch(Throwable ex){
                         Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
                     }
@@ -194,7 +196,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 {
                     String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message
                             + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
-                    URL web = new URL(MainActivity.serverUrl+"relate.php");
+                    URL web = new URL(LoginPage.serverUrl+"relate.php");
                     webConnection = (HttpURLConnection) web.openConnection();
 
                     webConnection.setDoOutput(true);
@@ -213,7 +215,8 @@ public class AddActivity extends Activity implements View.OnClickListener{
                     String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
 
                     try {
-                        result1 = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
+                        result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+                        Log.w("alzand", inputStreamString+" relate");
                         Log.w("alzand", result1);
                     }catch(Throwable ex){
                         Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
@@ -225,14 +228,17 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
 
                 if(result.equals("False") || result1.equals("False")){
-                    startActivity(new Intent(this, AddActivity.class));
+                    finish();
+                    startActivity(new Intent(this, AddActivity.class).putExtra("USER_UID", username));
                 }
                 else{
-                    startActivity(new Intent(this, UserActivity.class));
+                    finish();
+                    startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
                 }
                 break;
             case R.id.tvCancel:
-                startActivity(new Intent(this, UserActivity.class));
+                finish();
+                startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
                 break;
         }
     }

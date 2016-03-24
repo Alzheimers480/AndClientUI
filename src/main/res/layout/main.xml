@@ -15,7 +15,7 @@
         android:layout_marginTop="20sp"
         android:textStyle="italic"
         android:textSize="40dp"
-        android:text="Alzheimer's App"
+        android:text="Who R U?"
         />
 
     <TextView

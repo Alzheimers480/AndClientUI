@@ -1,43 +1,18 @@
 package com.cse480.alzand;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.BatteryManager;
-
-import android.os.Bundle;
 
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Set;
 import java.io.File;
 
 import android.util.Log;
@@ -113,7 +88,7 @@ public class Picture extends Activity{
 	     .build();
 
 	 Request request = new Request.Builder()
-	     .url(MainActivity.serverUrl+"predict.php")
+	     .url(LoginPage.serverUrl+"predict.php")
 	     .post(requestBody)
 	     .build();
 

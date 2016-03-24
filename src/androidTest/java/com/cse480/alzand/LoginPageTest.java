@@ -9,13 +9,13 @@ import android.test.ActivityInstrumentationTestCase2;
  * <p/>
  * To run this test, you can type:
  * adb shell am instrument -w \
- * -e class com.cse480.alzand.MainActivityTest \
+ * -e class com.cse480.alzand.LoginPageTest \
  * com.cse480.alzand.tests/android.test.InstrumentationTestRunner
  */
-public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class LoginPageTest extends ActivityInstrumentationTestCase2<LoginPage> {
 
-    public MainActivityTest() {
-        super("com.cse480.alzand", MainActivity.class);
+    public LoginPageTest() {
+        super("com.cse480.alzand", LoginPage.class);
     }
 
 }

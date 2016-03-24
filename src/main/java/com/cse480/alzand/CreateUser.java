@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,6 +21,7 @@ import java.util.Scanner;
 public class CreateUser extends Activity implements View.OnClickListener{
 
     Button bRegister;
+    TextView tvCancel;
     EditText etName, etLname, etEmail, etUsername, etPassword, etConfirmPassword;
 
     private HttpURLConnection httpClient;
@@ -36,6 +38,7 @@ public class CreateUser extends Activity implements View.OnClickListener{
         etPassword = (EditText)findViewById(R.id.etPassword);
         etConfirmPassword = (EditText)findViewById(R.id.etConfirmPassword);
         bRegister = (Button)findViewById(R.id.bRegister);
+        tvCancel = (TextView) findViewById(R.id.tvCancel);
 
         checkValidation();
         etName.addTextChangedListener(tWatcher);
@@ -46,6 +49,7 @@ public class CreateUser extends Activity implements View.OnClickListener{
         etConfirmPassword.addTextChangedListener(tWatcher);
 
         bRegister.setOnClickListener(this);
+        tvCancel.setOnClickListener(this);
     }
 
     private void checkValidation(){
@@ -93,7 +97,7 @@ public class CreateUser extends Activity implements View.OnClickListener{
                     String urlParameters = "USERNAME=" + username + "&PASSWORD=" + password
                             + "&PASSWORD2=" + confirmPassword + "&FNAME=" + name
                             + "&LNAME=" + lname + "&EMAIL=" + email;
-                    URL website = new URL(MainActivity.serverUrl+"newuser.php");
+                    URL website = new URL(LoginPage.serverUrl+"newuser.php");
                     httpClient = (HttpURLConnection) website.openConnection();
 
                     httpClient.setDoOutput(true);
@@ -111,18 +115,22 @@ public class CreateUser extends Activity implements View.OnClickListener{
                     InputStream response = httpClient.getInputStream();
                     //converts InputStream -> String
                     String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-                    if(inputStreamString.equals("False")){
-                        startActivity(new Intent(this, CreateUser.class));
+                    if(inputStreamString.equals("True")){
+                        startActivity(new Intent(this, LoginPage.class));
                     }
                     else{
-                        startActivity(new Intent(this, MainActivity.class));
+                        startActivity(new Intent(this, CreateUser.class));
                     }
                 }
                 catch(Exception ex){
                     Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
                 }
 
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, LoginPage.class));
+                break;
+            case R.id.tvCancel:
+                finish();
+                startActivity(new Intent(this, LoginPage.class));
                 break;
         }
     }

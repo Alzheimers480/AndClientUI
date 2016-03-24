@@ -16,7 +16,7 @@ import android.widget.*;
 import java.io.*;
 import java.util.*;
 
-public class MainActivity extends Activity implements View.OnClickListener
+public class LoginPage extends Activity implements View.OnClickListener
 {
 	Button bLogin;
 	EditText etUsername, etPassword;
@@ -25,8 +25,8 @@ public class MainActivity extends Activity implements View.OnClickListener
     //private HttpClient httpclient;
     private HttpURLConnection httpClient;
 	static String serverUrl = "http://141.210.25.46/";
-	String result="";
-	String result2="";
+	String result="False";
+	String result2="0";
 	String username="";
     /** Called when the activity is first created. */
     @Override
@@ -78,15 +78,11 @@ public class MainActivity extends Activity implements View.OnClickListener
 		}
 	};
 
-	public String getUserName(){
-		return username;
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.bLogin:
-				String username = etUsername.getText().toString();
+				username = etUsername.getText().toString();
 				String password = etPassword.getText().toString();
 
 				try
@@ -111,8 +107,9 @@ public class MainActivity extends Activity implements View.OnClickListener
 					String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
 
 					try {
-						result = inputStreamString.substring(inputStreamString.length() - 5, inputStreamString.length());
-						Log.w("alzand", result);
+						result = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+						Log.w("alzand", inputStreamString+" auth.php");
+						Log.w("alzand", result+" auth.php");
 					}catch(Exception ex){
 						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
 					}
@@ -146,6 +143,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
 					try {
 						result2 = inputStreamString.toString();
+						Log.w("alzand", result2+" var.php");
 					}catch(Exception ex){
 						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
 					}
@@ -155,11 +153,12 @@ public class MainActivity extends Activity implements View.OnClickListener
 					Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
 				}
 
-				if(result.equals("False") || result2.equals("0")){
-					startActivity(new Intent(this, MainActivity.class));
+				if(result.equals("True") && result2.equals("1")){
+					startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
 				}
 				else{
-					startActivity(new Intent(this, UserActivity.class));
+					finish();
+					startActivity(new Intent(this, LoginPage.class));
 				}
 				break;
 			case R.id.tvRegisterLink:

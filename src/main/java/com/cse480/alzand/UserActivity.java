@@ -5,15 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class UserActivity extends Activity implements View.OnClickListener{
 
     Button bLogout, b1, bAddAcquaintance;
+    String username ="";
     //TextView tvAcquaintance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Bundle bundle = getIntent().getExtras();
+        username = bundle.getString("USER_UID");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
@@ -32,13 +34,16 @@ public class UserActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bLogout:
-                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                startActivity(new Intent(this, LoginPage.class));
                 break;
             case R.id.b1:
+                finish();
                 startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed
                 break;
             case R.id.bAddAcquaintance:
-                startActivity(new Intent(this, AddActivity.class));
+                finish();
+                startActivity(new Intent(this, AddActivity.class).putExtra("USER_UID", username));
                 break;
         }
     }
