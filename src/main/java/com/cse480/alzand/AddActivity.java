@@ -34,212 +34,177 @@ public class AddActivity extends Activity implements View.OnClickListener{
     ImageView IVP1, IVP2, IVP3;
     String username= "";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Bundle bundle = getIntent().getExtras();
-        username = bundle.getString("USER_UID");
-        Log.w("alzand", username+" wooowowowow");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+	try {
+	    Bundle bundle = getIntent().getExtras();
+	    username = bundle.getString("USER_UID");
+	    Log.w("alzand", username+" is the current username");
+	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.activity_add);
 
-        btnP1 = (Button) findViewById(R.id.btnP1);
-        btnP1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iv = 1;
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
-            }
-        });
-        btnP2 = (Button) findViewById(R.id.btnP2);
-        btnP2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iv = 2;
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
-            }
-        });
-        btnP3 = (Button) findViewById(R.id.btnP3);
-        btnP3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iv = 3;
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
-            }
-        });
-        IVP1 = (ImageView) findViewById(R.id.IVP1);
-        IVP2 = (ImageView) findViewById(R.id.IVP2);
-        IVP3 = (ImageView) findViewById(R.id.IVP3);
-        bAdd = (Button) findViewById(R.id.bAdd);
-        etFirstName = (EditText) findViewById(R.id.etFirstName);
-        etLastName = (EditText) findViewById(R.id.etLastName);
-        etAcqID = (EditText) findViewById(R.id.etAcqid);
-        etRelation = (EditText) findViewById(R.id.etRelation);
-        etMessage = (EditText) findViewById(R.id.etMessage);
-        tvCancel = (TextView) findViewById(R.id.tvCancel);
+	    btnP1 = (Button) findViewById(R.id.btnP1);
+	    btnP1.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			iv = 1;
+			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, 0);
+		    }
+		});
+	    btnP2 = (Button) findViewById(R.id.btnP2);
+	    btnP2.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			iv = 2;
+			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, 0);
+		    }
+		});
+	    btnP3 = (Button) findViewById(R.id.btnP3);
+	    btnP3.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			iv = 3;
+			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, 0);
+		    }
+		});
+	    IVP1 = (ImageView) findViewById(R.id.IVP1);
+	    IVP2 = (ImageView) findViewById(R.id.IVP2);
+	    IVP3 = (ImageView) findViewById(R.id.IVP3);
+	    bAdd = (Button) findViewById(R.id.bAdd);
+	    etFirstName = (EditText) findViewById(R.id.etFirstName);
+	    etLastName = (EditText) findViewById(R.id.etLastName);
+	    etAcqID = (EditText) findViewById(R.id.etAcqid);
+	    etRelation = (EditText) findViewById(R.id.etRelation);
+	    etMessage = (EditText) findViewById(R.id.etMessage);
+	    tvCancel = (TextView) findViewById(R.id.tvCancel);
 
-        checkValidation();
-        etFirstName.addTextChangedListener(tWatcher);
-        etLastName.addTextChangedListener(tWatcher);
-        etAcqID.addTextChangedListener(tWatcher);
-        etRelation.addTextChangedListener(tWatcher);
+	    checkValidation();
+	    // etFirstName.addTextChangedListener(tWatcher);
+	    // etLastName.addTextChangedListener(tWatcher);
+	    // etAcqID.addTextChangedListener(tWatcher);
+	    // etRelation.addTextChangedListener(tWatcher);
 
-        bAdd.setOnClickListener(this);
-        tvCancel.setOnClickListener(this);
+	    bAdd.setOnClickListener(this);
+	    tvCancel.setOnClickListener(this);
+	} catch (Exception e) {
+	    Log.w("alzand","oncreate threw error"+e.toString());
+	}
     }
 
     private void checkValidation() {
-        if (TextUtils.isEmpty(etFirstName.getText())
-                || TextUtils.isEmpty(etLastName.getText())
-                || TextUtils.isEmpty(etAcqID.getText())
-                || TextUtils.isEmpty(etRelation.getText()))
-            bAdd.setEnabled(false);
-        else
-            bAdd.setEnabled(true);
+	try {
+	    if (TextUtils.isEmpty(etFirstName.getText())
+		|| TextUtils.isEmpty(etLastName.getText())
+		|| TextUtils.isEmpty(etAcqID.getText())
+		|| TextUtils.isEmpty(etRelation.getText()))
+		bAdd.setEnabled(false);
+	    else
+		bAdd.setEnabled(true);
+	} catch (Exception e) {
+	    Log.w("alzand","checkValidation threw error"+e.toString());
+	}
     }
 
-    TextWatcher tWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            checkValidation();
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
+	// TODO Auto-generated method stub
+	try {
+	    super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println(data.getData().getPath());
-        Bitmap bp = (Bitmap) data.getExtras().get("data");
+	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
+	    Bitmap bp = (Bitmap) data.getExtras().get("data");
 
-        switch(iv) {
-            case 0:
-                System.out.println("error");
-                break;
-            case 1:
+	    switch(iv) {
+	    case 0:
+		Log.w("alzand","error");
+		break;
+	    case 1:
 
-                IVP1.setImageBitmap(bp);
-                IFP1 = data.getData();
-                break;
+		IVP1.setImageBitmap(bp);
+		IFP1 = data.getData();
+		break;
 
-            case 2:
+	    case 2:
 
-                IVP2.setImageBitmap(bp);
-                IFP2 = data.getData();
-                break;
-            case 3:
+		IVP2.setImageBitmap(bp);
+		IFP2 = data.getData();
+		break;
+	    case 3:
 
-                IVP3.setImageBitmap(bp);
-                IFP3 = data.getData();
-                break;
-        }
+		IVP3.setImageBitmap(bp);
+		IFP3 = data.getData();
+		break;
+	    }
+	    checkValidation();
+	} catch (Exception e) {
+	    Log.w("alzand","onactivityresult threw error"+e.toString());
+	}
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bAdd:
-                String fName = etFirstName.getText().toString();
-                String lName = etLastName.getText().toString();
-                String aqID = etAcqID.getText().toString();
-                String relation = etRelation.getText().toString();
-                String message = etMessage.getText().toString();
-
-                try
-                {
-                    String urlParameters = "USERNAME=" + aqID + "&FNAME=" + fName + "&LNAME=" + lName;
-                    URL website = new URL(LoginPage.serverUrl+"newacqu.php");
-                    urlConnection = (HttpURLConnection) website.openConnection();
-
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
-                    urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-                    try {
-                        OutputStream output = urlConnection.getOutputStream();
-                        output.write(urlParameters.getBytes("UTF-8"));
-                    }
-                    catch(Exception ex){
-                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-                    }
-
-                    InputStream response = urlConnection.getInputStream();
-                    //converts InputStream -> String
-                    String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-
-                    try {
-                        result = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
-                        Log.w("alzand", inputStreamString+" newacqu");
-                        Log.w("alzand", result);
-                    }catch(Throwable ex){
-                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-                    }
-                }
-                catch (Exception ex){
-                    Log.w("alzand", ex.toString() + " " + Thread.currentThread().getStackTrace().toString());
-                }
+	try {
+	    switch (v.getId()) {
+	    case R.id.bAdd:
+		String fName = etFirstName.getText().toString();
+		String lName = etLastName.getText().toString();
+		String aqID = etAcqID.getText().toString();
+		String relation = etRelation.getText().toString();
+		String message = etMessage.getText().toString();
 
 
-                try
-                {
-                    String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message
-                            + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
-                    URL web = new URL(LoginPage.serverUrl+"relate.php");
-                    webConnection = (HttpURLConnection) web.openConnection();
+		String urlParameters = "USERNAME=" + aqID + "&FNAME=" + fName + "&LNAME=" + lName;
+		URL website = new URL(LoginPage.serverUrl+"newacqu.php");
+		urlConnection = (HttpURLConnection) website.openConnection();
 
-                    webConnection.setDoOutput(true);
-                    webConnection.setRequestProperty("Accept-Charset", "UTF-8");
-                    webConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-                    try {
-                        OutputStream output = webConnection.getOutputStream();
-                        output.write(urlParams.getBytes("UTF-8"));
-                    }
-                    catch(Exception ex){
-                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-                    }
+		urlConnection.setDoOutput(true);
+		urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
+		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 
-                    InputStream response = webConnection.getInputStream();
-                    //converts InputStream -> String
-                    String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
+		OutputStream output = urlConnection.getOutputStream();
+		output.write(urlParameters.getBytes("UTF-8"));
 
-                    try {
-                        result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
-                        Log.w("alzand", inputStreamString+" relate");
-                        Log.w("alzand", result1);
-                    }catch(Throwable ex){
-                        Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-                    }
-                }
-                catch (Exception ex){
-                    Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-                }
+		InputStream response = urlConnection.getInputStream();
+		//converts InputStream -> String
+		String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
+		result = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+		Log.w("alzand", inputStreamString+" newacqu");
+		Log.w("alzand", result);
 
+		String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
+		URL web = new URL(LoginPage.serverUrl+"relate.php");
+		webConnection = (HttpURLConnection) web.openConnection();
+		webConnection.setDoOutput(true);
+		webConnection.setRequestProperty("Accept-Charset", "UTF-8");
+		webConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		output = webConnection.getOutputStream();
+		output.write(urlParams.getBytes("UTF-8"));
+		response = webConnection.getInputStream();
+		//converts InputStream -> String
+		inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
+		result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+		Log.w("alzand", inputStreamString+" relate");
+		Log.w("alzand", result1);
 
-                if(result.equals("False") || result1.equals("False")){
-                    finish();
-                    startActivity(new Intent(this, AddActivity.class).putExtra("USER_UID", username));
-                }
-                else{
-                    finish();
-                    startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
-                }
-                break;
-            case R.id.tvCancel:
-                finish();
-                startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
-                break;
-        }
+		if(result.equals("False") || result1.equals("False")){
+		    finish();
+		    startActivity(new Intent(this, AddActivity.class).putExtra("USER_UID", username));
+		}
+		else{
+		    finish();
+		    startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
+		}
+		
+		break;
+	    case R.id.tvCancel:
+		finish();
+		startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
+		break;
+	    }
+	} catch (Exception e) {
+	    Log.w("alzand","onClick threw error"+e.toString());
+	}
     }
 }
