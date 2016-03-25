@@ -2,3 +2,6 @@ PLEASE DON'T version control local.properties!
 
 b.ps1 builds from powershell
 i.ps1 builds from powershell
+
+start-emu.ps1 starts one of my emulators so it might not work for you
+impsh.ps1 pushes the correct files to the device for relate and predict
