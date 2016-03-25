@@ -179,16 +179,22 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
 		MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 		OkHttpClient client = new OkHttpClient();
-		File picture = new File("/sdcard/7.bmp");
-		Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
-
+		File picture1 = new File("/sdcard/8.bmp");
+		Log.w("alzand", "File...::::" + picture1 + " : " + picture1.exists());
+		File picture2 = new File("/sdcard/9.bmp");
+		Log.w("alzand", "File...::::" + picture2 + " : " + picture2.exists());
+		File picture3 = new File("/sdcard/10.bmp");
+		Log.w("alzand", "File...::::" + picture3 + " : " + picture3.exists());
+		
 		RequestBody requestBody = new MultipartBuilder()
 		    .type(MultipartBuilder.FORM)
 		    .addFormDataPart("USERNAME", username)
 		    .addFormDataPart("ACQUNAME", aqID)
 		    .addFormDataPart("RELATION", relation)
 		    .addFormDataPart("MESSAGE", message)
-		    .addFormDataPart("pics[]", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
+		    .addFormDataPart("pics[]", "8.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture1))
+		    .addFormDataPart("pics[]", "9.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture2))
+		    .addFormDataPart("pics[]", "10.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture3))
 		    .build();
 
 		Request request = new Request.Builder()
