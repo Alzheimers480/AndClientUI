@@ -20,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import com.squareup.okhttp.*;
+import java.io.*;
 
 public class AddActivity extends Activity implements View.OnClickListener{
 
@@ -173,30 +175,48 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		Log.w("alzand", inputStreamString+" newacqu");
 		Log.w("alzand", result);
 
-		String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
-		URL web = new URL(LoginPage.serverUrl+"relate.php");
-		webConnection = (HttpURLConnection) web.openConnection();
-		webConnection.setDoOutput(true);
-		webConnection.setRequestProperty("Accept-Charset", "UTF-8");
-		webConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-		output = webConnection.getOutputStream();
-		output.write(urlParams.getBytes("UTF-8"));
-		response = webConnection.getInputStream();
-		//converts InputStream -> String
-		inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-		result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
-		Log.w("alzand", inputStreamString+" relate");
-		Log.w("alzand", result1);
+		// NEW CODE FOR RELATE
 
-		if(result.equals("False") || result1.equals("False")){
-		    finish();
-		    startActivity(new Intent(this, AddActivity.class).putExtra("USER_UID", username));
-		}
-		else{
-		    finish();
-		    startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
-		}
+		MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
+		OkHttpClient client = new OkHttpClient();
+		File picture = new File("/sdcard/7.bmp");
+		Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
+
+		RequestBody requestBody = new MultipartBuilder()
+		    .type(MultipartBuilder.FORM)
+		    .addFormDataPart("USERNAME", username)
+		    .addFormDataPart("ACQUNAME", aqID)
+		    .addFormDataPart("RELATION", relation)
+		    .addFormDataPart("MESSAGE", message)
+		    .addFormDataPart("pics[]", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
+		    .build();
+
+		Request request = new Request.Builder()
+		    .url(LoginPage.serverUrl+"relate.php")
+		    .post(requestBody)
+		    .build();
+
+		Response realresponse = client.newCall(request).execute();
+		if (!realresponse.isSuccessful()) throw new IOException("Unexpected code " + realresponse);
+		String resString = realresponse.body().string();
+		Log.w("alzand","Response string :"+resString);
 		
+		// String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
+		// URL web = new URL(LoginPage.serverUrl+"relate.php");
+		// webConnection = (HttpURLConnection) web.openConnection();
+		// webConnection.setDoOutput(true);
+		// webConnection.setRequestProperty("Accept-Charset", "UTF-8");
+		// webConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		// output = webConnection.getOutputStream();
+		// output.write(urlParams.getBytes("UTF-8"));
+		// response = webConnection.getInputStream();
+		// //converts InputStream -> String
+		// inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
+		// result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+		// Log.w("alzand", inputStreamString+" relate");
+		// Log.w("alzand", result1);
+		finish();
+		startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
 		break;
 	    case R.id.tvCancel:
 		finish();
