@@ -103,11 +103,12 @@
         android:id="@+id/btnP2" />
 
             <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/IVP2"
-        android:layout_gravity="center_horizontal"
-        android:src="#ffffff" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/IVP2"
+                android:layout_gravity="center_horizontal"
+                android:src="#ffffff"
+                android:adjustViewBounds="true" />
 
             <Button
         android:layout_width="match_parent"
@@ -117,11 +118,12 @@
         android:id="@+id/btnP3" />
 
             <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/IVP3"
-        android:layout_gravity="center_horizontal"
-        android:src="#ffffff" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/IVP3"
+                android:layout_gravity="center_horizontal"
+                android:src="#ffffff"
+                android:adjustViewBounds="true" />
 
             <Button
         android:id="@+id/bAdd"

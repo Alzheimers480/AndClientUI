@@ -3,6 +3,12 @@ package com.cse480.alzand;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.media.FaceDetector;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -110,13 +116,50 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	}
     }
 
+	private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
+		Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
+		Canvas canvas = new Canvas(convertedBitmap);
+		Paint paint = new Paint();
+		paint.setColor(Color.BLACK);
+		canvas.drawBitmap(bitmap, 0, 0, paint);
+		return convertedBitmap;
+	}
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	// TODO Auto-generated method stub
 	try {
 	    super.onActivityResult(requestCode, resultCode, data);
 
+
 	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
-	    Bitmap bp = (Bitmap) data.getExtras().get("data");
+	    Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
+		FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
+		FaceDetector.Face[] face = new FaceDetector.Face[1];
+
+		fd.findFaces(bp, face);
+		if(face[0].confidence()>.4){
+			Log.w("alzand","Face detected");
+		}
+		else{
+			Log.w("alzand","Face Not detected");
+		}
+		float eyeDistance = face[0].eyesDistance();
+		Log.w("alzand", String.valueOf(eyeDistance));
+		PointF midPoint1=new PointF();
+		face[0].getMidPoint(midPoint1);
+		Log.w("alzand", String.valueOf(midPoint1.x));
+		int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+		int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+		int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+		int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
+		Log.w("alzand", String.valueOf(bp.getWidth())+" bp width");
+		Log.w("alzand", String.valueOf(bp.getHeight())+" bp Height");
+		Log.w("alzand", String.valueOf(left1)+" left");
+		Log.w("alzand", String.valueOf(right1)+" right");
+		Log.w("alzand", String.valueOf(top1)+" top");
+		Log.w("alzand", String.valueOf(bottom1)+" bottom");
+		Bitmap testPic1 = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+
 
 	    switch(iv) {
 	    case 0:
@@ -124,18 +167,18 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		break;
 	    case 1:
 
-		IVP1.setImageBitmap(bp);
+		IVP1.setImageBitmap(testPic1);
 		IFP1 = data.getData();
 		break;
 
 	    case 2:
 
-		IVP2.setImageBitmap(bp);
+		IVP2.setImageBitmap(testPic1);
 		IFP2 = data.getData();
 		break;
 	    case 3:
 
-		IVP3.setImageBitmap(bp);
+		IVP3.setImageBitmap(testPic1);
 		IFP3 = data.getData();
 		break;
 	    }
