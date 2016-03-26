@@ -2,7 +2,19 @@ package com.cse480.alzand;
 
 import android.app.Activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.media.FaceDetector;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,10 +37,12 @@ import org.json.*;
 
 public class Picture extends Activity{
     Button b1;
+	Button sendButton;
     ImageView iv;
     TextToSpeech tts;
     String resString;
     String acqName;
+	String ivPath;
     String relation;
     String message;
     String distance;
@@ -52,18 +66,26 @@ public class Picture extends Activity{
 		}
 	    });
         b1 = (Button) findViewById(R.id.btnPicture);
+		sendButton = (Button) findViewById(R.id.sendButton);
         iv = (ImageView) findViewById(R.id.imageView);
 	txt = (TextView) findViewById(R.id.infout);
+		sendButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				predictPic();
+			}
+		});
         b1.setOnClickListener(new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-		    predictPic();
+			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, 0);
 		}
 	    });
 
 	try {
-	    bp = BitmapFactory.decodeFile("/sdcard/7.bmp");
-	    iv.setImageBitmap(bp);
+	    //bp = BitmapFactory.decodeFile("/sdcard/7.bmp");
+	    //iv.setImageBitmap(bp);
 	} catch (Exception e) {
 	    Log.w("alzand","tried to read file "+e.toString());
 	    StringWriter sw = new StringWriter();
@@ -74,17 +96,100 @@ public class Picture extends Activity{
 	Log.w("alzand"," png block done ");
     }
 
+	public Bitmap toGrayscale(Bitmap bmpOriginal)
+	{
+		int width, height;
+		height = bmpOriginal.getHeight();
+		width = bmpOriginal.getWidth();
+
+		Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+		Canvas c = new Canvas(bmpGrayscale);
+		Paint paint = new Paint();
+		ColorMatrix cm = new ColorMatrix();
+		cm.setSaturation(0);
+		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+		paint.setColorFilter(f);
+		c.drawBitmap(bmpOriginal, 0, 0, paint);
+		return bmpGrayscale;
+	}
+
+	public Uri getImageUri(Context inContext, Bitmap inImage) {
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+		String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+		return Uri.parse(path);
+	}
+
+	private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
+		Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
+		Canvas canvas = new Canvas(convertedBitmap);
+		Paint paint = new Paint();
+		paint.setColor(Color.BLACK);
+		canvas.drawBitmap(bitmap, 0, 0, paint);
+		return convertedBitmap;
+	}
+
+	public String getRealPathFromURI(Uri uri) {
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+		cursor.moveToFirst();
+		int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+		return cursor.getString(idx);
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		try {
+			super.onActivityResult(requestCode, resultCode, data);
+
+
+			//	    Log.w("alzand","line 126 "+data.getData().getPath());
+			Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
+			FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
+			FaceDetector.Face[] face = new FaceDetector.Face[1];
+
+			fd.findFaces(bp, face);
+			if(face[0].confidence()>.4){
+				Log.w("alzand","Face detected");
+			}
+			else{
+				Log.w("alzand","Face Not detected");
+			}
+			float eyeDistance = face[0].eyesDistance();
+			Log.w("alzand", String.valueOf(eyeDistance));
+			PointF midPoint1=new PointF();
+			face[0].getMidPoint(midPoint1);
+			Log.w("alzand", String.valueOf(midPoint1.x));
+			int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+			int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+			int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+			int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
+			Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+			Bitmap testPic1 = toGrayscale(colorCropBm);
+			// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+			Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+
+			// CALL THIS METHOD TO GET THE ACTUAL PATH
+			String finalPath = getRealPathFromURI(tempUri);
+			Log.w("alzand", finalPath + " filepath");
+
+			iv.setImageBitmap(testPic1);
+			ivPath = finalPath;
+		} catch (Exception e) {
+			Log.w("alzand","onactivityresult threw error"+e.toString());
+		}
+	}
+
     protected void predictPic() {
 	try{
 	    MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 	    OkHttpClient client = new OkHttpClient();
-	    File picture = new File("/sdcard/7.bmp");
+	    File picture = new File(ivPath);
 	    Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
 
 	    RequestBody requestBody = new MultipartBuilder()
 		.type(MultipartBuilder.FORM)
 		.addFormDataPart("USERNAME", username)
-		.addFormDataPart("pic", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
+		.addFormDataPart("pic", ivPath, RequestBody.create(MEDIA_TYPE_PGM, picture))
 		.build();
 
 	    Request request = new Request.Builder()
