@@ -34,12 +34,14 @@ public class Picture extends Activity{
     String distance;
     Bitmap bp;
     TextView txt;
-
+    String username;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	Bundle bundle = getIntent().getExtras();
+	username = bundle.getString("USER_UID");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_picture);
-
+	setContentView(R.layout.activity_picture);
 	tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
 		@Override
 		public void onInit(int status) {
@@ -52,15 +54,14 @@ public class Picture extends Activity{
         b1 = (Button) findViewById(R.id.btnPicture);
         iv = (ImageView) findViewById(R.id.imageView);
 	txt = (TextView) findViewById(R.id.infout);
-	
         b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-		predictPic();
-            }
-	});
+		@Override
+		public void onClick(View v) {
+		    predictPic();
+		}
+	    });
 
-		try {
+	try {
 	    bp = BitmapFactory.decodeFile("/sdcard/7.bmp");
 	    iv.setImageBitmap(bp);
 	} catch (Exception e) {
@@ -74,36 +75,35 @@ public class Picture extends Activity{
     }
 
     protected void predictPic() {
-
 	try{
-	 MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
-	 OkHttpClient client = new OkHttpClient();
-	 File picture = new File("/sdcard/7.bmp");
-	 Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
+	    MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
+	    OkHttpClient client = new OkHttpClient();
+	    File picture = new File("/sdcard/7.bmp");
+	    Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
 
-	 RequestBody requestBody = new MultipartBuilder()
-	     .type(MultipartBuilder.FORM)
-	     .addFormDataPart("USERNAME", "switch202")
-	     .addFormDataPart("pic", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
-	     .build();
+	    RequestBody requestBody = new MultipartBuilder()
+		.type(MultipartBuilder.FORM)
+		.addFormDataPart("USERNAME", username)
+		.addFormDataPart("pic", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
+		.build();
 
-	 Request request = new Request.Builder()
-	     .url(LoginPage.serverUrl+"predict.php")
-	     .post(requestBody)
-	     .build();
+	    Request request = new Request.Builder()
+		.url(LoginPage.serverUrl+"predict.php")
+		.post(requestBody)
+		.build();
 
-	 Response response = client.newCall(request).execute();
-	 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-	 resString = response.body().string();
+	    Response response = client.newCall(request).execute();
+	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+	    resString = response.body().string();
 
 	 
 	 
-	 Log.w("alzand","Response string :"+resString);
-	 JSONObject jObject = new JSONObject(resString);
-	 acqName = jObject.getString("ACQUAINTANCE_FNAME")+" "+jObject.getString("ACQUAINTANCE_LNAME");
-	 relation = jObject.getString("RELATION");
-	 message = jObject.getString("DESCRIPTION");
-	 distance = jObject.getString("DISTANCE");
+	    Log.w("alzand","Response string :"+resString);
+	    JSONObject jObject = new JSONObject(resString);
+	    acqName = jObject.getString("ACQUAINTANCE_FNAME")+" "+jObject.getString("ACQUAINTANCE_LNAME");
+	    relation = jObject.getString("RELATION");
+	    message = jObject.getString("DESCRIPTION");
+	    distance = jObject.getString("DISTANCE");
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
