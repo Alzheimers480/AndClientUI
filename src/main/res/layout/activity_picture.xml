@@ -25,11 +25,20 @@
 
     
     <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Take Picture"
+    android:textColor="@android:color/white"
+    android:id="@+id/btnPicture"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true" />
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Take Picture"
+        android:text="Send Picture"
         android:textColor="@android:color/white"
-        android:id="@+id/btnPicture"
+        android:id="@+id/sendButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

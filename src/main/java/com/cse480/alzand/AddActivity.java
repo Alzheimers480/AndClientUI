@@ -1,15 +1,20 @@
 package com.cse480.alzand;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.media.FaceDetector;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,7 +38,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
     Button bAdd, btnP1, btnP2, btnP3;
     int iv = 0;
-    Uri IFP1,IFP2,IFP3;
+    String IFP1,IFP2,IFP3;
     EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
     private HttpURLConnection urlConnection, webConnection;
@@ -125,6 +130,37 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		return convertedBitmap;
 	}
 
+	public Bitmap toGrayscale(Bitmap bmpOriginal)
+	{
+		int width, height;
+		height = bmpOriginal.getHeight();
+		width = bmpOriginal.getWidth();
+
+		Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+		Canvas c = new Canvas(bmpGrayscale);
+		Paint paint = new Paint();
+		ColorMatrix cm = new ColorMatrix();
+		cm.setSaturation(0);
+		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+		paint.setColorFilter(f);
+		c.drawBitmap(bmpOriginal, 0, 0, paint);
+		return bmpGrayscale;
+	}
+
+	public Uri getImageUri(Context inContext, Bitmap inImage) {
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+		String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+		return Uri.parse(path);
+	}
+
+	public String getRealPathFromURI(Uri uri) {
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+		cursor.moveToFirst();
+		int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+		return cursor.getString(idx);
+	}
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	// TODO Auto-generated method stub
 	try {
@@ -158,7 +194,14 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		Log.w("alzand", String.valueOf(right1)+" right");
 		Log.w("alzand", String.valueOf(top1)+" top");
 		Log.w("alzand", String.valueOf(bottom1)+" bottom");
-		Bitmap testPic1 = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+		Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+		Bitmap testPic1 = toGrayscale(colorCropBm);
+		// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+		Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+
+		// CALL THIS METHOD TO GET THE ACTUAL PATH
+		String finalPath = getRealPathFromURI(tempUri);
+		Log.w("alzand", finalPath+" filepath");
 
 
 	    switch(iv) {
@@ -168,18 +211,18 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	    case 1:
 
 		IVP1.setImageBitmap(testPic1);
-		IFP1 = data.getData();
+		IFP1 = finalPath;
 		break;
 
 	    case 2:
 
 		IVP2.setImageBitmap(testPic1);
-		IFP2 = data.getData();
+		IFP2 = finalPath;
 		break;
 	    case 3:
 
 		IVP3.setImageBitmap(testPic1);
-		IFP3 = data.getData();
+		IFP3 = finalPath;
 		break;
 	    }
 	    checkValidation();
@@ -222,11 +265,11 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
 		MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 		OkHttpClient client = new OkHttpClient();
-		File picture1 = new File("/sdcard/8.bmp");
+		File picture1 = new File(IFP1);
 		Log.w("alzand", "File...::::" + picture1 + " : " + picture1.exists());
-		File picture2 = new File("/sdcard/9.bmp");
+		File picture2 = new File(IFP2);
 		Log.w("alzand", "File...::::" + picture2 + " : " + picture2.exists());
-		File picture3 = new File("/sdcard/10.bmp");
+		File picture3 = new File(IFP3);
 		Log.w("alzand", "File...::::" + picture3 + " : " + picture3.exists());
 		
 		RequestBody requestBody = new MultipartBuilder()
@@ -235,9 +278,9 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		    .addFormDataPart("ACQUNAME", aqID)
 		    .addFormDataPart("RELATION", relation)
 		    .addFormDataPart("MESSAGE", message)
-		    .addFormDataPart("pics[]", "8.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture1))
-		    .addFormDataPart("pics[]", "9.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture2))
-		    .addFormDataPart("pics[]", "10.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture3))
+		    .addFormDataPart("pics[]", IFP1, RequestBody.create(MEDIA_TYPE_PGM, picture1))
+		    .addFormDataPart("pics[]", IFP2, RequestBody.create(MEDIA_TYPE_PGM, picture2))
+		    .addFormDataPart("pics[]", IFP3, RequestBody.create(MEDIA_TYPE_PGM, picture3))
 		    .build();
 
 		Request request = new Request.Builder()
