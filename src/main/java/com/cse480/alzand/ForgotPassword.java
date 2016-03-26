@@ -14,12 +14,14 @@ import com.squareup.okhttp.*;
 public class ForgotPassword extends Activity implements View.OnClickListener{
 
     private EditText username;
+    private TextView output;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_forgot_password);
 	username = (EditText) findViewById(R.id.username);
+	output = (TextView) findViewById(R.id.output);
     }
 
     @Override
@@ -37,7 +39,14 @@ public class ForgotPassword extends Activity implements View.OnClickListener{
 		.post(requestBody)
 		.build();
 	    Response response = client.newCall(request).execute();
-	    Log.w("alzand","Response string: "+response.body().string());
+	    String stringResponse = response.body().string();
+	    Log.w("alzand","Response string: "+stringResponse+".");
+	    if(stringResponse.equals("True")) {
+		output.setText("Email Sent!");
+	    }
+	    else {
+		output.setText("Error! Email NOT Sent!");
+	    }
 	} catch (Exception e) {
 	    Log.w("alzand","forgotpassword sendEmail threw error"+e.toString());
 	}

@@ -10,15 +10,14 @@ import android.util.*;
 public class UserActivity extends Activity implements View.OnClickListener{
 
     Button bLogout, b1, bAddAcquaintance;
-    String username ="";
+    String username ="switch202";
     //TextView tvAcquaintance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	try {
-	    // Bundle bundle = getIntent().getExtras();
-	    // username = bundle.getString("USER_UID");
-	    username = savedInstanceState.getString("USER_UID");
+	    Bundle bundle = getIntent().getExtras();
+	    username = bundle.getString("USER_UID");
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_user);
 
@@ -46,7 +45,7 @@ public class UserActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.b1:
                 finish();
-                startActivity(new Intent(this, Picture.class)); //Josh's cam classname needed
+                startActivity(new Intent(this, Picture.class).putExtra("USER_UID", username));
                 break;
             case R.id.bAddAcquaintance:
                 finish();
