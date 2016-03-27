@@ -6,3 +6,4 @@ testdata
 *.pgm
 *.png
 local.properties
+gradle-app.setting
