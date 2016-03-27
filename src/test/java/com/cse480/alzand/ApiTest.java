@@ -8,13 +8,14 @@ import static org.junit.Assert.*;
 
 import com.squareup.okhttp.*;
 import java.io.*;
-
+import org.json.*;
 
 @SmallTest
 public class ApiTest {
     private OkHttpClient client;
     private String ip, response;
-
+    private JSONObject jsonParser;
+	
     @Before
     public void setUp() {
 	client = new OkHttpClient();
@@ -44,9 +45,21 @@ public class ApiTest {
 	    picture1 = new File(current+"\\relater\\1.bmp");
 	    picture2 = new File(current+"\\relater\\2.bmp");
 	    picture3 = new File(current+"\\relater\\3.bmp");
-	    assertEquals(current,"C:\\Users\\dnkeller\\dev\\AndClientUI");
 	    response = relate("dnkeller", "mZbrg", "Grandson", " My least favorite grandson", picture1, picture2, picture3);
 	    assertEquals(response, "True");
+	} catch (Exception e) {fail("file exception thrown: "+e.toString());}
+	File picture;
+	try {
+	    current = new File( "." ).getCanonicalPath();
+	    picture = new File(current+"\\relater\\7.bmp");
+	    response = predict("dnkeller", picture);
+	    jsonParser = new JSONObject(response);
+	    assertEquals(jsonParser.getString("ACQUAINTANCE_FNAME"),"Mark");
+	    assertEquals(jsonParser.getString("ACQUAINTANCE_LNAME"),"Zineberg");
+	    assertEquals(jsonParser.getString("RELATION"),"Grandson");
+	    assertEquals(jsonParser.getString("GENDER"),"female");
+	    Float distance = Float.parseFloat(jsonParser.getString("DISTANCE"));
+	    assertTrue( distance > 0 && distance < 100);
 	} catch (Exception e) {fail("file exception thrown: "+e.toString());}
     }
 
@@ -132,6 +145,26 @@ public class ApiTest {
 	    return response.body().string();
 	} catch (Exception e) {fail("relate exception: "+e.toString());}
 	return "";
+    }
+
+    private String predict(String username, File picture) {
+	MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
+	RequestBody requestBody = new MultipartBuilder()
+	    .type(MultipartBuilder.FORM)
+	    .addFormDataPart("USERNAME", username)
+	    .addFormDataPart("pic", "7.bmp", RequestBody.create(MEDIA_TYPE_PGM, picture))
+	    .build();
+
+	Request request = new Request.Builder()
+	    .url(ip+"/predict.php")
+	    .post(requestBody)
+	    .build();
+	try {
+	    Response response = client.newCall(request).execute();
+	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+	    return response.body().string();
+	} catch (Exception e) {fail("predict exception: "+e.toString());}
+	return "";	
     }
 }
     
