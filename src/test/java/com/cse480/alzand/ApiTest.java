@@ -16,7 +16,7 @@ public class ApiTest {
     private String ip = "http://141.210.25.46";
     private String response;
     private JSONObject jsonParser;
-    private static Float cutoff = 100.0f;
+    private static Float cutoff = 150.0f;
     private String picPath;
 	
     @Before
@@ -46,9 +46,11 @@ public class ApiTest {
 	response = relate("dnkeller", "mZbrg", "Grandson", " My least favorite grandson", "\\model\\s01\\1.pgm", "\\model\\s01\\2.pgm", "\\model\\s01\\3.pgm");
 	assertEquals(response, "True");
 	response = relate("dnkeller", "lrMD", "Brother", " My coolest brother. He is so extreme", "\\model\\s02\\1.pgm", "\\model\\s02\\2.pgm", "\\model\\s02\\3.pgm");
+	response = relate("dnkeller", "smmcd", "Son", " My favorite son. He makes me so happy", "\\model\\s03\\1.pgm", "\\model\\s03\\2.pgm", "\\model\\s03\\3.pgm");
 	assertEquals(response, "True");
 	assertTrue(predict("dnkeller", "\\test\\s01\\4.pgm", "Mark Zineberg", "Grandson", "female", " My least favorite grandson"));
 	assertTrue(predict("dnkeller", "\\test\\s02\\4.pgm", "Larry McDermin", "Brother", "male", " My coolest brother. He is so extreme"));
+	assertTrue(predict("dnkeller", "\\test\\s03\\4.pgm", "Smiles McDermin", "Son", "male", " My favorite son. He makes me so happy"));
     }
 
     private String newUser(String username, String password, String password2, String fname, String lname, String email) {
