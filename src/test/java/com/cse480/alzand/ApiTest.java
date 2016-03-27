@@ -45,7 +45,10 @@ public class ApiTest {
 	assertEquals(response, "True");
 	response = relate("dnkeller", "mZbrg", "Grandson", " My least favorite grandson", "\\model\\s01\\1.pgm", "\\model\\s01\\2.pgm", "\\model\\s01\\3.pgm");
 	assertEquals(response, "True");
+	response = relate("dnkeller", "lrMD", "Brother", " My coolest brother. He is so extreme", "\\model\\s02\\1.pgm", "\\model\\s02\\2.pgm", "\\model\\s02\\3.pgm");
+	assertEquals(response, "True");
 	assertTrue(predict("dnkeller", "\\test\\s01\\4.pgm", "Mark Zineberg", "Grandson", "female", " My least favorite grandson"));
+	assertTrue(predict("dnkeller", "\\test\\s02\\4.pgm", "Larry McDermin", "Brother", "male", " My coolest brother. He is so extreme"));
     }
 
     private String newUser(String username, String password, String password2, String fname, String lname, String email) {
