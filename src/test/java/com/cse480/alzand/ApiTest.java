@@ -45,20 +45,7 @@ public class ApiTest {
 	assertEquals(response, "True");
 	response = relate("dnkeller", "mZbrg", "Grandson", " My least favorite grandson", "\\model\\s01\\1.pgm", "\\model\\s01\\2.pgm", "\\model\\s01\\3.pgm");
 	assertEquals(response, "True");
-
-	File picture;
-	try {
-	    picture = new File(picPath+"\\test\\s01\\4.pgm");
-	    response = predict("dnkeller", picture);
-	    jsonParser = new JSONObject(response);
-	    assertEquals(jsonParser.getString("ACQUAINTANCE_FNAME"),"Mark");
-	    assertEquals(jsonParser.getString("ACQUAINTANCE_LNAME"),"Zineberg");
-	    assertEquals(jsonParser.getString("RELATION"),"Grandson");
-	    assertEquals(jsonParser.getString("GENDER"),"female");
-	    assertEquals(jsonParser.getString("DESCRIPTION")," My least favorite grandson");
-	    Float distance = Float.parseFloat(jsonParser.getString("DISTANCE"));
-	    assertTrue(distance > 0 && distance < cutoff);
-	} catch (Exception e) {fail("predict exception thrown: "+e.toString());}
+	assertTrue(predict("dnkeller", "\\test\\s01\\4.pgm", "Mark Zineberg", "Grandson", "female", " My least favorite grandson"));
     }
 
     private String newUser(String username, String password, String password2, String fname, String lname, String email) {
@@ -150,7 +137,9 @@ public class ApiTest {
 	return "";
     }
 
-    private String predict(String username, File picture) {
+    private Boolean predict(String username, String path, String fullname, String relation, String gender, String description) {
+	File picture = new File(picPath+path);
+	
 	MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 	RequestBody requestBody = new MultipartBuilder()
 	    .type(MultipartBuilder.FORM)
@@ -161,12 +150,23 @@ public class ApiTest {
 	    .url(ip+"/predict.php")
 	    .post(requestBody)
 	    .build();
+	
+	String sResponse = "";
 	try {
 	    Response response = client.newCall(request).execute();
 	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-	    return response.body().string();
+	    sResponse = response.body().string();
 	} catch (Exception e) {fail("predict exception: "+e.toString());}
-	return "";	
+	try {
+	jsonParser = new JSONObject(sResponse);
+	assertEquals(jsonParser.getString("ACQUAINTANCE_FNAME")+" "+jsonParser.getString("ACQUAINTANCE_LNAME"), fullname);
+	assertEquals(jsonParser.getString("RELATION"), relation);
+	assertEquals(jsonParser.getString("GENDER"), gender);
+	assertEquals(jsonParser.getString("DESCRIPTION"), description);
+	Float distance = Float.parseFloat(jsonParser.getString("DISTANCE"));
+	assertTrue(distance > 0 && distance < cutoff);
+	} catch (Exception e) {fail("JSON exception: "+e.toString());}
+	return true;	
     }
 }
     
