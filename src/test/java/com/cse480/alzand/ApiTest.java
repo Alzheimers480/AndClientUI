@@ -16,7 +16,7 @@ public class ApiTest {
     private String ip = "http://141.210.25.46";
     private String response;
     private JSONObject jsonParser;
-    private static Float cutoff = 100;
+    private static Float cutoff = 100.0f;
 	
     @Before
     public void setUp() {
