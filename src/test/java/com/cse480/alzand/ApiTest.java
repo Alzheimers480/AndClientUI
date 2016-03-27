@@ -13,13 +13,14 @@ import org.json.*;
 @SmallTest
 public class ApiTest {
     private OkHttpClient client;
-    private String ip, response;
+    private String ip = "http://141.210.25.46";
+    private String response;
     private JSONObject jsonParser;
+    private static Float cutoff = 100;
 	
     @Before
     public void setUp() {
 	client = new OkHttpClient();
-	ip = "http://141.210.25.46";
     }
 
     @Test
@@ -59,8 +60,8 @@ public class ApiTest {
 	    assertEquals(jsonParser.getString("RELATION"),"Grandson");
 	    assertEquals(jsonParser.getString("GENDER"),"female");
 	    Float distance = Float.parseFloat(jsonParser.getString("DISTANCE"));
-	    assertTrue( distance > 0 && distance < 100);
-	} catch (Exception e) {fail("file exception thrown: "+e.toString());}
+	    assertTrue(distance > 0 && distance < cutoff);
+	} catch (Exception e) {fail("predict exception thrown: "+e.toString());}
     }
 
     private String newUser(String username, String password, String password2, String fname, String lname, String email) {
