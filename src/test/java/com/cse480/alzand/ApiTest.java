@@ -56,11 +56,17 @@ public class ApiTest {
 	assertEquals(response, "True");
 	response = relate("dnkeller", "gjm", "Neighbor", " He steals my newspapers", "\\model\\s06\\1.pgm", "\\model\\s06\\2.pgm", "\\model\\s06\\3.pgm");
 	assertEquals(response, "True");
+
+	response = newAcq("hj", "Happy", "Johnson", "male");
+	assertEquals(response, "True");
+	response = relate("dnkeller", "hj", "Caretaker", " He gives me my meds", "\\model\\s07\\1.pgm", "\\model\\s07\\2.pgm", "\\model\\s07\\3.pgm");
+	assertEquals(response, "True");
 	
 	assertTrue(predict("dnkeller", "\\test\\s01\\4.pgm", "Mark Zineberg", "Grandson", "female", " My least favorite grandson"));
 	assertTrue(predict("dnkeller", "\\test\\s02\\4.pgm", "Larry McDermin", "Brother", "male", " My coolest brother. He is so extreme"));
 	assertTrue(predict("dnkeller", "\\test\\s03\\4.pgm", "Smiles McDermin", "Son", "male", " My favorite son. He makes me so happy"));
 	assertTrue(predict("dnkeller", "\\test\\s06\\4.pgm", "Grimy Jim", "Neighbor", "male", " He steals my newspapers"));
+	assertTrue(predict("dnkeller", "\\test\\s07\\4.pgm", "Happy Johnson", "Caretaker", "male", " He gives me my meds"));
     }
 
     private String newUser(String username, String password, String password2, String fname, String lname, String email) {
