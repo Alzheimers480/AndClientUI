@@ -35,22 +35,32 @@ public class ApiTest {
 	assertEquals(response, "user already exists False");
 	response = newUser("nkeller","shpongle","shpongle","David","Keller","dnkeller@oakland.edu");
 	assertEquals(response, "True");
-	response = newAcq("mZbrg", "Mark", "Zineberg", "female");
-	assertEquals(response, "True");
 	response = auth("dnkeller","shpongle");
 	assertEquals(response, "True");
-	response = newAcq("lrMD", "Larry", "McDermin", "male");
-	assertEquals(response, "True");
-	response = newAcq("smmcd", "Smiles", "McDermin", "male");
+	
+	response = newAcq("mZbrg", "Mark", "Zineberg", "female");
 	assertEquals(response, "True");
 	response = relate("dnkeller", "mZbrg", "Grandson", " My least favorite grandson", "\\model\\s01\\1.pgm", "\\model\\s01\\2.pgm", "\\model\\s01\\3.pgm");
 	assertEquals(response, "True");
+
+	response = newAcq("lrMD", "Larry", "McDermin", "male");
+	assertEquals(response, "True");
 	response = relate("dnkeller", "lrMD", "Brother", " My coolest brother. He is so extreme", "\\model\\s02\\1.pgm", "\\model\\s02\\2.pgm", "\\model\\s02\\3.pgm");
+	
+	response = newAcq("smmcd", "Smiles", "McDermin", "male");
+	assertEquals(response, "True");
 	response = relate("dnkeller", "smmcd", "Son", " My favorite son. He makes me so happy", "\\model\\s03\\1.pgm", "\\model\\s03\\2.pgm", "\\model\\s03\\3.pgm");
 	assertEquals(response, "True");
+
+	response = newAcq("gjm", "Grimy", "Jim", "male");
+	assertEquals(response, "True");
+	response = relate("dnkeller", "gjm", "Neighbor", " He steals my newspapers", "\\model\\s06\\1.pgm", "\\model\\s06\\2.pgm", "\\model\\s06\\3.pgm");
+	assertEquals(response, "True");
+	
 	assertTrue(predict("dnkeller", "\\test\\s01\\4.pgm", "Mark Zineberg", "Grandson", "female", " My least favorite grandson"));
 	assertTrue(predict("dnkeller", "\\test\\s02\\4.pgm", "Larry McDermin", "Brother", "male", " My coolest brother. He is so extreme"));
 	assertTrue(predict("dnkeller", "\\test\\s03\\4.pgm", "Smiles McDermin", "Son", "male", " My favorite son. He makes me so happy"));
+	assertTrue(predict("dnkeller", "\\test\\s06\\4.pgm", "Grimy Jim", "Neighbor", "male", " He steals my newspapers"));
     }
 
     private String newUser(String username, String password, String password2, String fname, String lname, String email) {
