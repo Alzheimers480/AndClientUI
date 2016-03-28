@@ -19,6 +19,8 @@ import java.util.*;
 public class LoginPage extends Activity implements View.OnClickListener
 {
 	Button bLogin;
+	private TextView output;
+
 	EditText etUsername, etPassword;
 	TextView tvRegisterLink, tvForgotPassword;
 
@@ -39,8 +41,10 @@ public class LoginPage extends Activity implements View.OnClickListener
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
 		bLogin = (Button) findViewById(R.id.bLogin);
+		output = (TextView) findViewById(R.id.output);
 		tvRegisterLink = (TextView) findViewById(R.id.tvRegisterLink);
 		tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
+
 
 		checkValidation();
 		etUsername.addTextChangedListener(tWatcher);
@@ -108,6 +112,12 @@ public class LoginPage extends Activity implements View.OnClickListener
 
 					try {
 						result = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
+						if(inputStreamString == "False"){
+							output.setText("Incorrect Password");
+						}
+						else if(inputStreamString.length()!=5){
+							output.setText(inputStreamString.substring(0, inputStreamString.length()-6));
+						}
 						Log.w("alzand", inputStreamString+" auth.php");
 						Log.w("alzand", result+" auth.php");
 					}catch(Exception ex){
@@ -157,8 +167,8 @@ public class LoginPage extends Activity implements View.OnClickListener
 					startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
 				}
 				else{
-					finish();
-					startActivity(new Intent(this, LoginPage.class));
+					//finish();
+					//startActivity(new Intent(this, LoginPage.class));
 				}
 				break;
 			case R.id.tvRegisterLink:
