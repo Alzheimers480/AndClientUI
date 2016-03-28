@@ -14,8 +14,8 @@
     <Button
         android:id="@+id/b1"
         android:text="Camera"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="20dp"
+        android:textColor="@color/darkblue"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -23,15 +23,15 @@
         android:id="@+id/bAddAcquaintance"
         android:layout_width="match_parent"
         android:text="Add Acquaintance"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="80dp"
+        android:textColor="@color/darkblue"
+        android:layout_marginBottom="10dp"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/bLogout"
         android:text="Log Out"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="20dp"
+        android:textColor="@color/darkblue"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
