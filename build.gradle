@@ -28,3 +28,13 @@ android {
 	compile 'com.squareup.okhttp:okhttp:2.2.0'
     }
 }
+
+dependencies {
+	//unit testing
+	testCompile 'junit:junit:4.12'
+	// androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+	// androidTestCompile 'com.android.support:support-annotations:23.0.1'
+	// androidTestCompile 'com.android.support.test:runner:0.4.1'
+	// androidTestCompile 'com.android.support.test:rules:0.4.1'
+	// androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+}

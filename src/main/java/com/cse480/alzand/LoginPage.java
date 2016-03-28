@@ -3,10 +3,7 @@ package com.cse480.alzand;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-//import org.apache.http.client.*;
-//import org.apache.http.*;
 import java.net.*;
-
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;

@@ -37,12 +37,13 @@ import org.json.*;
 
 public class Picture extends Activity{
     Button b1;
-	Button sendButton;
+    Button sendButton;
     ImageView iv;
     TextToSpeech tts;
     String resString;
     String acqName;
-	String ivPath;
+    String gender;
+    String ivPath;
     String relation;
     String message;
     String distance;
@@ -208,12 +209,13 @@ public class Picture extends Activity{
 	    acqName = jObject.getString("ACQUAINTANCE_FNAME")+" "+jObject.getString("ACQUAINTANCE_LNAME");
 	    relation = jObject.getString("RELATION");
 	    message = jObject.getString("DESCRIPTION");
+	    gender = jObject.getString("GENDER").equals("male") ? "He" : "She";
 	    distance = jObject.getString("DISTANCE");
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
 
-	String speach = "This is "+acqName+". They are your "+relation+"."+message;
+	String speach = "This is "+acqName+". "+gender+" is your "+relation+". "+message;
 
 	txt.setText(speach+"The distance is "+distance);
 	tts.speak(speach,TextToSpeech.QUEUE_ADD,null);
