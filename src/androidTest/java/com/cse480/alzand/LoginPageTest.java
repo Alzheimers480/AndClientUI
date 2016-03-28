@@ -1,21 +1,53 @@
 package com.cse480.alzand;
 
-import android.test.ActivityInstrumentationTestCase2;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import android.test.suitebuilder.annotation.*;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
-/**
- * This is a simple framework for a test of an Application.  See
- * {@link android.test.ApplicationTestCase ApplicationTestCase} for more information on
- * how to write and extend Application tests.
- * <p/>
- * To run this test, you can type:
- * adb shell am instrument -w \
- * -e class com.cse480.alzand.LoginPageTest \
- * com.cse480.alzand.tests/android.test.InstrumentationTestRunner
- */
-public class LoginPageTest extends ActivityInstrumentationTestCase2<LoginPage> {
 
-    public LoginPageTest() {
-        super("com.cse480.alzand", LoginPage.class);
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.assertion.ViewAssertions.*;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
+
+
+@RunWith(AndroidJUnit4.class)
+@LargeTest
+public class LoginPageTest {
+
+    private String mStringToBetyped;
+
+    @Rule
+    public ActivityTestRule<LoginPage> mActivityRule = new ActivityTestRule<LoginPage>(
+            LoginPage.class);
+
+    // @Before
+    // public void initValidString() {
+    //     // Specify a valid string.
+    //     mStringToBetyped = "Espresso";
+    // }
+
+    @Test
+    public void changeText_sameActivity() {
+	onView(withId(R.id.etUsername))
+	    .perform(typeText("dnkeller"), closeSoftKeyboard());
+	onView(withId(R.id.etPassword))
+	    .perform(typeText("shpongle"), closeSoftKeyboard());
+	onView(withId(R.id.bLogin))
+	    .perform(click());
+	onView(withId(R.id.bLogin))
+	    .perform(click());
+        // // Type text and then press the button.
+        // onView(withId(R.id.editTextUserInput))
+        //         .perform(typeText(mStringToBetyped), closeSoftKeyboard());
+        // onView(withId(R.id.changeTextBt)).perform(click());
+
+        // // Check that the text was changed.
+        // onView(withId(R.id.textToBeChanged))
+        //         .check(matches(withText(mStringToBetyped)));
     }
-
 }
