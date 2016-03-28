@@ -34,11 +34,9 @@ public class LoginPageTest {
     @Test
     public void changeText_sameActivity() {
 	onView(withId(R.id.etUsername))
-	    .perform(typeText("dnkeller"), closeSoftKeyboard());
+	    .perform(typeText("switch202"), closeSoftKeyboard());
 	onView(withId(R.id.etPassword))
-	    .perform(typeText("shpongle"), closeSoftKeyboard());
-	onView(withId(R.id.bLogin))
-	    .perform(click());
+	    .perform(typeText("password"), closeSoftKeyboard());
 	onView(withId(R.id.bLogin))
 	    .perform(click());
         // // Type text and then press the button.
