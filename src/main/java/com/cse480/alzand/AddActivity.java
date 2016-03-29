@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.net.Uri;
 import java.io.InputStream;
@@ -41,6 +42,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
     String IFP1,IFP2,IFP3;
     EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
+	String gender;
     private HttpURLConnection urlConnection, webConnection;
     String result = "False";
     String result1 = "False";
@@ -107,12 +109,30 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	}
     }
 
+	public void onRadioButtonClicked(View view) {
+		// Is the button now checked?
+		boolean checked = ((RadioButton) view).isChecked();
+
+		// Check which radio button was clicked
+		switch(view.getId()) {
+			case R.id.male:
+				if (checked)
+					gender="male";
+					break;
+			case R.id.female:
+				if (checked)
+					gender = "female";
+					break;
+		}
+	}
+
     private void checkValidation() {
 	try {
 	    if (TextUtils.isEmpty(etFirstName.getText())
 		|| TextUtils.isEmpty(etLastName.getText())
 		|| TextUtils.isEmpty(etAcqID.getText())
-		|| TextUtils.isEmpty(etRelation.getText()))
+		|| TextUtils.isEmpty(etRelation.getText())
+		|| gender.isEmpty())
 		bAdd.setEnabled(false);
 	    else
 		bAdd.setEnabled(true);
@@ -278,6 +298,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		    .addFormDataPart("ACQUNAME", aqID)
 		    .addFormDataPart("RELATION", relation)
 		    .addFormDataPart("MESSAGE", message)
+			.addFormDataPart("GENDER", gender)
 		    .addFormDataPart("pics[]", IFP1, RequestBody.create(MEDIA_TYPE_PGM, picture1))
 		    .addFormDataPart("pics[]", IFP2, RequestBody.create(MEDIA_TYPE_PGM, picture2))
 		    .addFormDataPart("pics[]", IFP3, RequestBody.create(MEDIA_TYPE_PGM, picture3))
