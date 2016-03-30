@@ -31,7 +31,12 @@ import android.util.Log;
 import com.squareup.okhttp.*;
 import java.io.*;
 import android.speech.tts.TextToSpeech;
+
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.json.*;
 
@@ -50,6 +55,10 @@ public class Picture extends Activity{
     Bitmap bp;
     TextView txt;
     String username;
+	ArrayList cropedFaces;
+	FaceDetector.Face[] face = new FaceDetector.Face[3];
+	FaceDetector.Face[] newFace;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,9 +155,51 @@ public class Picture extends Activity{
 			//	    Log.w("alzand","line 126 "+data.getData().getPath());
 			Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
 			FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
-			FaceDetector.Face[] face = new FaceDetector.Face[1];
-
 			fd.findFaces(bp, face);
+			int count = 0;
+			for (FaceDetector.Face i : face){
+				if(i != null){
+					count++;
+				}
+			}
+			int index = 0;
+			newFace = new FaceDetector.Face[count];
+			for (FaceDetector.Face i : face) {
+				if (i != null) {
+					newFace[index++] = i;
+				}
+			}
+			for(int i = 0; i<newFace.length; i++){
+				if(newFace[i].confidence()>.4){
+					Log.w("alzand","Face detected");
+				}
+				else{
+					Log.w("alzand","Face Not detected");
+				}
+				float eyeDistance = newFace[i].eyesDistance();
+				Log.w("alzand", String.valueOf(eyeDistance));
+				PointF midPoint1=new PointF();
+				newFace[i].getMidPoint(midPoint1);
+				Log.w("alzand", String.valueOf(midPoint1.x));
+				int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+				int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+				int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+				int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
+				Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+				Bitmap testPic1 = toGrayscale(colorCropBm);
+				// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+				Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+
+				// CALL THIS METHOD TO GET THE ACTUAL PATH
+				String finalPath = getRealPathFromURI(tempUri);
+				Log.w("alzand", finalPath + " filepath");
+
+				iv.setImageBitmap(testPic1);
+				ivPath = finalPath;
+				Map temp = new HashMap();
+				temp.put(finalPath, testPic1);
+				cropedFaces.add(temp);
+			}
 			if(face[0].confidence()>.4){
 				Log.w("alzand","Face detected");
 			}
@@ -214,7 +265,6 @@ public class Picture extends Activity{
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
-
 	String speach = "This is "+acqName+". "+gender+" is your "+relation+". "+message;
 
 	txt.setText(speach+"The distance is "+distance);
