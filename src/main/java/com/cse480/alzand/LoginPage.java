@@ -12,171 +12,112 @@ import android.view.View;
 import android.widget.*;
 import java.io.*;
 import java.util.*;
+import com.squareup.okhttp.*;
+import android.os.AsyncTask;
 
-public class LoginPage extends Activity implements View.OnClickListener
-{
-	Button bLogin;
-	private TextView output;
-
-	EditText etUsername, etPassword;
-	TextView tvRegisterLink, tvForgotPassword;
-
-    //private HttpClient httpclient;
-    private HttpURLConnection httpClient;
-	static String serverUrl = "http://141.210.25.46/";
-	String result="False";
-	String result2="0";
-	String username="";
+public class LoginPage extends Activity {
+    private Button bLogin;
+    private EditText etUsername, etPassword;
+    private TextView tvRegisterLink, tvForgotPassword, output;
+    private OkHttpClient client;
+    public static String serverUrl = "http://141.210.25.46";
+    private String username, password;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-		Log.w("alzand", "Begin");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+	try {
+	    super.onCreate(savedInstanceState);
+	    Log.w("alzand", "Begin");
+	    client = new OkHttpClient();
 
-		etUsername = (EditText) findViewById(R.id.etUsername);
-		etPassword = (EditText) findViewById(R.id.etPassword);
-		bLogin = (Button) findViewById(R.id.bLogin);
-		output = (TextView) findViewById(R.id.output);
-		tvRegisterLink = (TextView) findViewById(R.id.tvRegisterLink);
-		tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
+	    setContentView(R.layout.main);
 
+	    etUsername = (EditText) findViewById(R.id.etUsername);
+	    etPassword = (EditText) findViewById(R.id.etPassword);
+	    bLogin = (Button) findViewById(R.id.bLogin);
+	    output = (TextView) findViewById(R.id.output);
+	    tvRegisterLink = (TextView) findViewById(R.id.tvRegisterLink);
+	    tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
 
-		checkValidation();
-		etUsername.addTextChangedListener(tWatcher);
-		etPassword.addTextChangedListener(tWatcher);
-
-		bLogin.setOnClickListener(this);
-		tvRegisterLink.setOnClickListener(this);
-		tvForgotPassword.setOnClickListener(this);
-
-		username = etUsername.getText().toString();
+	    username="";
+	    password="";
+	
+	    etUsername.addTextChangedListener(tWatcher);
+	    etPassword.addTextChangedListener(tWatcher);
+	} catch (Exception e) {
+	    Log.w("alzand","on create: "+e.toString());
+	}
     }
 
-	private void checkValidation() {
-		if (TextUtils.isEmpty(etUsername.getText())
-				|| TextUtils.isEmpty(etPassword.getText()))
-			bLogin.setEnabled(false);
-		else
-			bLogin.setEnabled(true);
-	}
+    private void checkValidation() {
+	if (TextUtils.isEmpty(etUsername.getText())
+	    || TextUtils.isEmpty(etPassword.getText()))
+	    bLogin.setEnabled(false);
+	else
+	    bLogin.setEnabled(true);
+    }
 
-	TextWatcher tWatcher = new TextWatcher() {
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    TextWatcher tWatcher = new TextWatcher() {
+	    @Override
+	    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-		}
+	    @Override
+	    public void onTextChanged(CharSequence s, int start, int before, int count) {
+		checkValidation();
+	    }
 
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			checkValidation();
-		}
-
-		@Override
-		public void afterTextChanged(Editable s) {
-
-		}
+	    @Override
+	    public void afterTextChanged(Editable s) {}
 	};
 
+    public void Register(View v) {
+	startActivity(new Intent(this, CreateUser.class));
+    }
+
+    public void ForgotPassword(View v) {
+	startActivity(new Intent(this, ForgotPassword.class));
+    }
+
+    public void Login(View v) {
+	Log.w("alzand", "login triggered");
+	username = etUsername.getText().toString();
+	password = etPassword.getText().toString();
+	
+	Log.w("alzand","doing async");
+	new authTask().execute("scnolton","password");
+	Log.w("alzand","async done did");
+
+	//startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
+    }
+
+    private String auth(String username, String password) {
+	RequestBody requestBody = new MultipartBuilder()
+	    .type(MultipartBuilder.FORM)
+	    .addFormDataPart("USERNAME", username)
+	    .addFormDataPart("PASSWORD", password)
+	    .build();
+	Request request = new Request.Builder()
+	    .url(serverUrl+"/auth.php")
+	    .post(requestBody)
+	    .build();
+	try {
+	    Response response = client.newCall(request).execute();
+	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+	    return response.body().string();
+	} catch (Exception e) {Log.w("alzand","auth error: "+e.toString());}
+	return "";
+    }
+    
+    private class authTask extends AsyncTask<String,Void,String> {
 	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.bLogin:
-				username = etUsername.getText().toString();
-				String password = etPassword.getText().toString();
-
-				try
-				{
-					String urlParameters = "USERNAME=" + username+ "&PASSWORD=" + password;
-					URL website = new URL(serverUrl+"auth.php");
-					httpClient = (HttpURLConnection) website.openConnection();
-					httpClient.setRequestProperty("connection", "close");
-					httpClient.setDoOutput(true);
-					httpClient.setRequestProperty("Accept-Charset", "UTF-8");
-					httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-					try {
-						OutputStream output = httpClient.getOutputStream();
-						output.write(urlParameters.getBytes("UTF-8"));
-					}
-					catch(Exception ex){
-						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-					}
-
-					InputStream response = httpClient.getInputStream();
-					//converts InputStream -> String
-					String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-
-					try {
-						result = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
-						if(inputStreamString == "False"){
-							output.setText("Incorrect Password");
-						}
-						else if(inputStreamString.length()!=5){
-							output.setText(inputStreamString.substring(0, inputStreamString.length()-6));
-						}
-						Log.w("alzand", inputStreamString+" auth.php");
-						Log.w("alzand", result+" auth.php");
-					}catch(Exception ex){
-						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-					}
-
-				}
-				catch(Exception ex){
-					Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-				}
-
-
-				try
-				{
-					String param = "USERNAME=" + username;
-					URL url = new URL(serverUrl+"var.php");
-					httpClient = (HttpURLConnection) url.openConnection();
-					httpClient.setRequestProperty("connection", "close");
-					httpClient.setDoOutput(true);
-					httpClient.setRequestProperty("Accept-Charset", "UTF-8");
-					httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-					try {
-						OutputStream output = httpClient.getOutputStream();
-						output.write(param.getBytes("UTF-8"));
-					}
-					catch(Exception ex){
-						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-					}
-
-					InputStream response = httpClient.getInputStream();
-					//converts InputStream -> String
-					String inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-
-					try {
-						result2 = inputStreamString.toString();
-						Log.w("alzand", result2+" var.php");
-					}catch(Exception ex){
-						Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-					}
-
-				}
-				catch(Exception ex){
-					Log.w("alzand", ex.toString()+" "+Thread.currentThread().getStackTrace().toString());
-				}
-
-				if(result.equals("True") && result2.equals("1")){
-					startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
-				}
-				else{
-					//finish();
-					//startActivity(new Intent(this, LoginPage.class));
-				}
-				break;
-			case R.id.tvRegisterLink:
-				startActivity(new Intent(this, CreateUser.class));
-				break;
-			case R.id.tvForgotPassword:
-				startActivity(new Intent(this, ForgotPassword.class));
-				break;
-		}
-	}
+     	protected String doInBackground(String... creds) {
+     	    return auth(creds[0], creds[1]);
+     	}
+	@Override
+     	protected void onPostExecute(String result) {
+	    bLogin.setText("meow");
+     	}
+    }
 }
-
-//byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
-		//int postDataLength = postData.length;
