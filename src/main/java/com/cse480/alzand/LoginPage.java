@@ -81,15 +81,9 @@ public class LoginPage extends Activity {
     }
 
     public void Login(View v) {
-	Log.w("alzand", "login triggered");
 	username = etUsername.getText().toString();
 	password = etPassword.getText().toString();
-	
-	Log.w("alzand","doing async");
-	new authTask().execute("scnolton","password");
-	Log.w("alzand","async done did");
-
-	//startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
+	new authTask().execute(username, password);
     }
 
     private String auth(String username, String password) {
@@ -117,7 +111,18 @@ public class LoginPage extends Activity {
      	}
 	@Override
      	protected void onPostExecute(String result) {
-	    bLogin.setText("meow");
-     	}
+	    Log.w("alzand","result was "+result);
+	    if (result.equals("True")) {
+		goToMain();
+	    } else if(result.equals("user wasn't found False")) {
+		output.setText("Invalid username");
+	    } else {
+		output.setText("Invalid password");
+	    }
+	}
+    }
+
+    protected void goToMain() {
+	startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
     }
 }
