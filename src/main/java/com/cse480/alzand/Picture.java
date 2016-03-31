@@ -83,18 +83,6 @@ public class Picture extends Activity{
 		    startActivityForResult(intent, 0);
 		}
 	    });
-
-	try {
-	    //bp = BitmapFactory.decodeFile("/sdcard/7.bmp");
-	    //iv.setImageBitmap(bp);
-	} catch (Exception e) {
-	    Log.w("alzand","tried to read file "+e.toString());
-	    StringWriter sw = new StringWriter();
-	    PrintWriter pw = new PrintWriter(sw);
-	    e.printStackTrace(pw);
-	    Log.w("alzand",sw.toString()); // stack trace as a string
-	}
-	Log.w("alzand"," png block done ");
     }
 
     public Bitmap toGrayscale(Bitmap bmpOriginal)
@@ -102,7 +90,6 @@ public class Picture extends Activity{
 	int width, height;
 	height = bmpOriginal.getHeight();
 	width = bmpOriginal.getWidth();
-
 	Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 	Canvas c = new Canvas(bmpGrayscale);
 	Paint paint = new Paint();
@@ -141,15 +128,11 @@ public class Picture extends Activity{
 	// TODO Auto-generated method stub
 	try {
 	    super.onActivityResult(requestCode, resultCode, data);
-
-
-	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
 	    Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
 	    FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
 	    FaceDetector.Face[] face = new FaceDetector.Face[1];
-
 	    fd.findFaces(bp, face);
-	    if(face[0].confidence()>.4){
+	    if(face != nil && face[0] != nil && face[0].confidence()>.4){
 		Log.w("alzand","Face detected");
 	    }
 	    else{
@@ -166,13 +149,14 @@ public class Picture extends Activity{
 	    int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
 	    Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
 	    Bitmap testPic1 = toGrayscale(colorCropBm);
+
+	    // http://stackoverflow.com/questions/20327213/getting-path-of-captured-image-in-android-using-camera-intent
 	    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
 	    Uri tempUri = getImageUri(getApplicationContext(), testPic1);
 
 	    // CALL THIS METHOD TO GET THE ACTUAL PATH
 	    String finalPath = getRealPathFromURI(tempUri);
 	    Log.w("alzand", finalPath + " filepath");
-
 	    iv.setImageBitmap(testPic1);
 	    ivPath = finalPath;
 	} catch (Exception e) {
@@ -201,10 +185,8 @@ public class Picture extends Activity{
 	    Response response = client.newCall(request).execute();
 	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 	    resString = response.body().string();
-
-	 
-	 
 	    Log.w("alzand","Response string :"+resString);
+	    
 	    JSONObject jObject = new JSONObject(resString);
 	    acqName = jObject.getString("ACQUAINTANCE_FNAME")+" "+jObject.getString("ACQUAINTANCE_LNAME");
 	    relation = jObject.getString("RELATION");
@@ -216,7 +198,6 @@ public class Picture extends Activity{
 	}
 
 	String speach = "This is "+acqName+". "+gender+" is your "+relation+". "+message;
-
 	txt.setText(speach+"The distance is "+distance);
 	tts.speak(speach,TextToSpeech.QUEUE_ADD,null);
     }
