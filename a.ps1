@@ -1,2 +1,1 @@
-# script to push testdata to android
-adb push testdata /sdcard/testdata
+.\b.ps1; if($?){.\i.ps1}
