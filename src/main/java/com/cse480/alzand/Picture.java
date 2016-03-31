@@ -37,7 +37,6 @@ import org.json.*;
 
 public class Picture extends Activity{
     Button b1;
-    Button sendButton;
     ImageView iv;
     TextToSpeech tts;
     String resString;
@@ -67,15 +66,9 @@ public class Picture extends Activity{
 		}
 	    });
         b1 = (Button) findViewById(R.id.btnPicture);
-	sendButton = (Button) findViewById(R.id.sendButton);
+
         iv = (ImageView) findViewById(R.id.imageView);
 	txt = (TextView) findViewById(R.id.infout);
-	sendButton.setOnClickListener(new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-		    predictPic();
-		}
-	    });
         b1.setOnClickListener(new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -132,7 +125,7 @@ public class Picture extends Activity{
 	    FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
 	    FaceDetector.Face[] face = new FaceDetector.Face[1];
 	    fd.findFaces(bp, face);
-	    if(face != nil && face[0] != nil && face[0].confidence()>.4){
+	    if(face != null && face[0] != null && face[0].confidence()>.4){
 		Log.w("alzand","Face detected");
 	    }
 	    else{
@@ -164,7 +157,7 @@ public class Picture extends Activity{
 	}
     }
 
-    protected void predictPic() {
+    public void predictPic(View v) {
 	try{
 	    MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
 	    OkHttpClient client = new OkHttpClient();
