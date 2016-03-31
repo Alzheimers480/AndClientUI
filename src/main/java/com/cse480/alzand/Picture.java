@@ -67,20 +67,20 @@ public class Picture extends Activity{
 		}
 	    });
         b1 = (Button) findViewById(R.id.btnPicture);
-		sendButton = (Button) findViewById(R.id.sendButton);
+	sendButton = (Button) findViewById(R.id.sendButton);
         iv = (ImageView) findViewById(R.id.imageView);
 	txt = (TextView) findViewById(R.id.infout);
-		sendButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				predictPic();
-			}
-		});
+	sendButton.setOnClickListener(new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+		    predictPic();
+		}
+	    });
         b1.setOnClickListener(new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, 0);
+		    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		    startActivityForResult(intent, 0);
 		}
 	    });
 
@@ -97,88 +97,88 @@ public class Picture extends Activity{
 	Log.w("alzand"," png block done ");
     }
 
-	public Bitmap toGrayscale(Bitmap bmpOriginal)
-	{
-		int width, height;
-		height = bmpOriginal.getHeight();
-		width = bmpOriginal.getWidth();
+    public Bitmap toGrayscale(Bitmap bmpOriginal)
+    {
+	int width, height;
+	height = bmpOriginal.getHeight();
+	width = bmpOriginal.getWidth();
 
-		Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-		Canvas c = new Canvas(bmpGrayscale);
-		Paint paint = new Paint();
-		ColorMatrix cm = new ColorMatrix();
-		cm.setSaturation(0);
-		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
-		paint.setColorFilter(f);
-		c.drawBitmap(bmpOriginal, 0, 0, paint);
-		return bmpGrayscale;
+	Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+	Canvas c = new Canvas(bmpGrayscale);
+	Paint paint = new Paint();
+	ColorMatrix cm = new ColorMatrix();
+	cm.setSaturation(0);
+	ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+	paint.setColorFilter(f);
+	c.drawBitmap(bmpOriginal, 0, 0, paint);
+	return bmpGrayscale;
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+	String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+	return Uri.parse(path);
+    }
+
+    private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
+	Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
+	Canvas canvas = new Canvas(convertedBitmap);
+	Paint paint = new Paint();
+	paint.setColor(Color.BLACK);
+	canvas.drawBitmap(bitmap, 0, 0, paint);
+	return convertedBitmap;
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+	Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+	cursor.moveToFirst();
+	int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+	return cursor.getString(idx);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	// TODO Auto-generated method stub
+	try {
+	    super.onActivityResult(requestCode, resultCode, data);
+
+
+	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
+	    Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
+	    FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
+	    FaceDetector.Face[] face = new FaceDetector.Face[1];
+
+	    fd.findFaces(bp, face);
+	    if(face[0].confidence()>.4){
+		Log.w("alzand","Face detected");
+	    }
+	    else{
+		Log.w("alzand","Face Not detected");
+	    }
+	    float eyeDistance = face[0].eyesDistance();
+	    Log.w("alzand", String.valueOf(eyeDistance));
+	    PointF midPoint1=new PointF();
+	    face[0].getMidPoint(midPoint1);
+	    Log.w("alzand", String.valueOf(midPoint1.x));
+	    int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+	    int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+	    int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+	    int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
+	    Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+	    Bitmap testPic1 = toGrayscale(colorCropBm);
+	    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+	    Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+
+	    // CALL THIS METHOD TO GET THE ACTUAL PATH
+	    String finalPath = getRealPathFromURI(tempUri);
+	    Log.w("alzand", finalPath + " filepath");
+
+	    iv.setImageBitmap(testPic1);
+	    ivPath = finalPath;
+	} catch (Exception e) {
+	    Log.w("alzand","onactivityresult threw error"+e.toString());
 	}
-
-	public Uri getImageUri(Context inContext, Bitmap inImage) {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-		String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-		return Uri.parse(path);
-	}
-
-	private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
-		Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
-		Canvas canvas = new Canvas(convertedBitmap);
-		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
-		canvas.drawBitmap(bitmap, 0, 0, paint);
-		return convertedBitmap;
-	}
-
-	public String getRealPathFromURI(Uri uri) {
-		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-		cursor.moveToFirst();
-		int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-		return cursor.getString(idx);
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		try {
-			super.onActivityResult(requestCode, resultCode, data);
-
-
-			//	    Log.w("alzand","line 126 "+data.getData().getPath());
-			Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
-			FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
-			FaceDetector.Face[] face = new FaceDetector.Face[1];
-
-			fd.findFaces(bp, face);
-			if(face[0].confidence()>.4){
-				Log.w("alzand","Face detected");
-			}
-			else{
-				Log.w("alzand","Face Not detected");
-			}
-			float eyeDistance = face[0].eyesDistance();
-			Log.w("alzand", String.valueOf(eyeDistance));
-			PointF midPoint1=new PointF();
-			face[0].getMidPoint(midPoint1);
-			Log.w("alzand", String.valueOf(midPoint1.x));
-			int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
-			int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
-			int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
-			int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
-			Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
-			Bitmap testPic1 = toGrayscale(colorCropBm);
-			// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-			Uri tempUri = getImageUri(getApplicationContext(), testPic1);
-
-			// CALL THIS METHOD TO GET THE ACTUAL PATH
-			String finalPath = getRealPathFromURI(tempUri);
-			Log.w("alzand", finalPath + " filepath");
-
-			iv.setImageBitmap(testPic1);
-			ivPath = finalPath;
-		} catch (Exception e) {
-			Log.w("alzand","onactivityresult threw error"+e.toString());
-		}
-	}
+    }
 
     protected void predictPic() {
 	try{
