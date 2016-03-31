@@ -1,1 +1,0 @@
-curl.exe http://141.210.25.46/predict.php -F "pic=@testdata/test/s03/8.pgm" -F "USERNAME=switch202"
