@@ -59,32 +59,8 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	    setContentView(R.layout.activity_add);
 
 	    btnP1 = (Button) findViewById(R.id.btnP1);
-	    btnP1.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			iv = 1;
-			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, 0);
-		    }
-		});
 	    btnP2 = (Button) findViewById(R.id.btnP2);
-	    btnP2.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			iv = 2;
-			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, 0);
-		    }
-		});
 	    btnP3 = (Button) findViewById(R.id.btnP3);
-	    btnP3.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			iv = 3;
-			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, 0);
-		    }
-		});
 	    IVP1 = (ImageView) findViewById(R.id.IVP1);
 	    IVP2 = (ImageView) findViewById(R.id.IVP2);
 	    IVP3 = (ImageView) findViewById(R.id.IVP3);
@@ -339,5 +315,21 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	} catch (Exception e) {
 	    Log.w("alzand","onClick threw error"+e.toString());
 	}
+    }
+
+    public void takePicture(View v) {
+	switch (v.getId()) {
+	case R.id.btnP1:
+	    iv = 1;
+	    break;
+	case R.id.btnP2:
+	    iv = 2;
+	    break;
+	case R.id.btnP3:
+	    iv = 3;
+	    break;
+	}
+	Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+	startActivityForResult(intent, 0);
     }
 }
