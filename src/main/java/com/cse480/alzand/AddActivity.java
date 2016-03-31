@@ -42,7 +42,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
     String IFP1,IFP2,IFP3;
     EditText etFirstName, etLastName, etAcqID, etRelation, etMessage;
     TextView tvCancel;
-	String gender;
+    String gender;
     private HttpURLConnection urlConnection, webConnection;
     String result = "False";
     String result1 = "False";
@@ -85,22 +85,22 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	}
     }
 
-	public void onRadioButtonClicked(View view) {
-		// Is the button now checked?
-		boolean checked = ((RadioButton) view).isChecked();
+    public void onRadioButtonClicked(View view) {
+	// Is the button now checked?
+	boolean checked = ((RadioButton) view).isChecked();
 
-		// Check which radio button was clicked
-		switch(view.getId()) {
-			case R.id.male:
-				if (checked)
-					gender="male";
-					break;
-			case R.id.female:
-				if (checked)
-					gender = "female";
-					break;
-		}
+	// Check which radio button was clicked
+	switch(view.getId()) {
+	case R.id.male:
+	    if (checked)
+		gender="male";
+	    break;
+	case R.id.female:
+	    if (checked)
+		gender = "female";
+	    break;
 	}
+    }
 
     private void checkValidation() {
 	try {
@@ -117,45 +117,45 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	}
     }
 
-	private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
-		Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
-		Canvas canvas = new Canvas(convertedBitmap);
-		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
-		canvas.drawBitmap(bitmap, 0, 0, paint);
-		return convertedBitmap;
-	}
+    private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
+	Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
+	Canvas canvas = new Canvas(convertedBitmap);
+	Paint paint = new Paint();
+	paint.setColor(Color.BLACK);
+	canvas.drawBitmap(bitmap, 0, 0, paint);
+	return convertedBitmap;
+    }
 
-	public Bitmap toGrayscale(Bitmap bmpOriginal)
-	{
-		int width, height;
-		height = bmpOriginal.getHeight();
-		width = bmpOriginal.getWidth();
+    public Bitmap toGrayscale(Bitmap bmpOriginal)
+    {
+	int width, height;
+	height = bmpOriginal.getHeight();
+	width = bmpOriginal.getWidth();
 
-		Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-		Canvas c = new Canvas(bmpGrayscale);
-		Paint paint = new Paint();
-		ColorMatrix cm = new ColorMatrix();
-		cm.setSaturation(0);
-		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
-		paint.setColorFilter(f);
-		c.drawBitmap(bmpOriginal, 0, 0, paint);
-		return bmpGrayscale;
-	}
+	Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+	Canvas c = new Canvas(bmpGrayscale);
+	Paint paint = new Paint();
+	ColorMatrix cm = new ColorMatrix();
+	cm.setSaturation(0);
+	ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+	paint.setColorFilter(f);
+	c.drawBitmap(bmpOriginal, 0, 0, paint);
+	return bmpGrayscale;
+    }
 
-	public Uri getImageUri(Context inContext, Bitmap inImage) {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-		String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-		return Uri.parse(path);
-	}
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+	String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+	return Uri.parse(path);
+    }
 
-	public String getRealPathFromURI(Uri uri) {
-		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-		cursor.moveToFirst();
-		int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-		return cursor.getString(idx);
-	}
+    public String getRealPathFromURI(Uri uri) {
+	Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+	cursor.moveToFirst();
+	int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+	return cursor.getString(idx);
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	// TODO Auto-generated method stub
@@ -165,39 +165,39 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
 	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
 	    Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
-		FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
-		FaceDetector.Face[] face = new FaceDetector.Face[1];
+	    FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
+	    FaceDetector.Face[] face = new FaceDetector.Face[1];
 
-		fd.findFaces(bp, face);
-		if(face[0].confidence()>.4){
-			Log.w("alzand","Face detected");
-		}
-		else{
-			Log.w("alzand","Face Not detected");
-		}
-		float eyeDistance = face[0].eyesDistance();
-		Log.w("alzand", String.valueOf(eyeDistance));
-		PointF midPoint1=new PointF();
-		face[0].getMidPoint(midPoint1);
-		Log.w("alzand", String.valueOf(midPoint1.x));
-		int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
-		int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
-		int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
-		int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
-		Log.w("alzand", String.valueOf(bp.getWidth())+" bp width");
-		Log.w("alzand", String.valueOf(bp.getHeight())+" bp Height");
-		Log.w("alzand", String.valueOf(left1)+" left");
-		Log.w("alzand", String.valueOf(right1)+" right");
-		Log.w("alzand", String.valueOf(top1)+" top");
-		Log.w("alzand", String.valueOf(bottom1)+" bottom");
-		Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
-		Bitmap testPic1 = toGrayscale(colorCropBm);
-		// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-		Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+	    fd.findFaces(bp, face);
+	    if(face[0].confidence()>.4){
+		Log.w("alzand","Face detected");
+	    }
+	    else{
+		Log.w("alzand","Face Not detected");
+	    }
+	    float eyeDistance = face[0].eyesDistance();
+	    Log.w("alzand", String.valueOf(eyeDistance));
+	    PointF midPoint1=new PointF();
+	    face[0].getMidPoint(midPoint1);
+	    Log.w("alzand", String.valueOf(midPoint1.x));
+	    int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+	    int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+	    int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+	    int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
+	    Log.w("alzand", String.valueOf(bp.getWidth())+" bp width");
+	    Log.w("alzand", String.valueOf(bp.getHeight())+" bp Height");
+	    Log.w("alzand", String.valueOf(left1)+" left");
+	    Log.w("alzand", String.valueOf(right1)+" right");
+	    Log.w("alzand", String.valueOf(top1)+" top");
+	    Log.w("alzand", String.valueOf(bottom1)+" bottom");
+	    Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+	    Bitmap testPic1 = toGrayscale(colorCropBm);
+	    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+	    Uri tempUri = getImageUri(getApplicationContext(), testPic1);
 
-		// CALL THIS METHOD TO GET THE ACTUAL PATH
-		String finalPath = getRealPathFromURI(tempUri);
-		Log.w("alzand", finalPath+" filepath");
+	    // CALL THIS METHOD TO GET THE ACTUAL PATH
+	    String finalPath = getRealPathFromURI(tempUri);
+	    Log.w("alzand", finalPath+" filepath");
 
 
 	    switch(iv) {
@@ -274,7 +274,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		    .addFormDataPart("ACQUNAME", aqID)
 		    .addFormDataPart("RELATION", relation)
 		    .addFormDataPart("MESSAGE", message)
-			.addFormDataPart("GENDER", gender)
+		    .addFormDataPart("GENDER", gender)
 		    .addFormDataPart("pics[]", IFP1, RequestBody.create(MEDIA_TYPE_PGM, picture1))
 		    .addFormDataPart("pics[]", IFP2, RequestBody.create(MEDIA_TYPE_PGM, picture2))
 		    .addFormDataPart("pics[]", IFP3, RequestBody.create(MEDIA_TYPE_PGM, picture3))
@@ -289,21 +289,6 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		if (!realresponse.isSuccessful()) throw new IOException("Unexpected code " + realresponse);
 		String resString = realresponse.body().string();
 		Log.w("alzand","Response string :"+resString);
-		
-		// String urlParams = "USERNAME=" + username + "&ACQUNAME=" + aqID + "&RELATION=" + relation + "&MESSAGE=" + message + "&pics[]=" + IFP1 + "&pics[]=" + IFP2 + "&pics[]=" + IFP3;
-		// URL web = new URL(LoginPage.serverUrl+"relate.php");
-		// webConnection = (HttpURLConnection) web.openConnection();
-		// webConnection.setDoOutput(true);
-		// webConnection.setRequestProperty("Accept-Charset", "UTF-8");
-		// webConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-		// output = webConnection.getOutputStream();
-		// output.write(urlParams.getBytes("UTF-8"));
-		// response = webConnection.getInputStream();
-		// //converts InputStream -> String
-		// inputStreamString = new Scanner(response,"UTF-8").useDelimiter("\\A").next();
-		// result1 = inputStreamString.substring(inputStreamString.length() - 4, inputStreamString.length());
-		// Log.w("alzand", inputStreamString+" relate");
-		// Log.w("alzand", result1);
 		finish();
 		startActivity(new Intent(this, UserActivity.class).putExtra("USER_UID", username));
 		break;
