@@ -239,7 +239,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		String message = etMessage.getText().toString();
 
 
-		String urlParameters = "USERNAME=" + aqID + "&FNAME=" + fName + "&LNAME=" + lName;
+		String urlParameters = "USERNAME=" + aqID + "&FNAME=" + fName + "&LNAME=" + lName + "&GENDER=" + gender;
 		URL website = new URL(LoginPage.serverUrl+"newacqu.php");
 		urlConnection = (HttpURLConnection) website.openConnection();
 
@@ -274,7 +274,6 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		    .addFormDataPart("ACQUNAME", aqID)
 		    .addFormDataPart("RELATION", relation)
 		    .addFormDataPart("MESSAGE", message)
-		    .addFormDataPart("GENDER", gender)
 		    .addFormDataPart("pics[]", IFP1, RequestBody.create(MEDIA_TYPE_PGM, picture1))
 		    .addFormDataPart("pics[]", IFP2, RequestBody.create(MEDIA_TYPE_PGM, picture2))
 		    .addFormDataPart("pics[]", IFP3, RequestBody.create(MEDIA_TYPE_PGM, picture3))
