@@ -217,7 +217,8 @@ public class Picture extends Activity{
 
 
 			//	    Log.w("alzand","line 126 "+data.getData().getPath());
-			Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
+			Uri orgUri = data.getData();
+			Bitmap bp = convert(BitmapFactory.decodeStream(getContentResolver().openInputStream(orgUri)), Bitmap.Config.RGB_565);
 			FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 3);
 			int test = fd.findFaces(bp, face);
 			int count = 0;
