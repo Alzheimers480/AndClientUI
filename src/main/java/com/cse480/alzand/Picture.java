@@ -56,19 +56,19 @@ public class Picture extends Activity{
     Bitmap bp;
     TextView txt;
     String username;
-	FaceDetector.Face[] face = new FaceDetector.Face[3];
-	FaceDetector.Face[] newFace;
-	String rel = "";
-	String mes = "";
+    FaceDetector.Face[] face = new FaceDetector.Face[3];
+    FaceDetector.Face[] newFace;
+    String rel = "";
+    String mes = "";
 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Bundle bundle = getIntent().getExtras();
-	    username = bundle.getString("USER_UID");
+	username = bundle.getString("USER_UID");
         super.onCreate(savedInstanceState);
-	    setContentView(R.layout.activity_picture);
-	    tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+	setContentView(R.layout.activity_picture);
+	tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
 		@Override
 		public void onInit(int status) {
 		    if(status == TextToSpeech.SUCCESS) {
@@ -78,78 +78,78 @@ public class Picture extends Activity{
 		}
 	    });
         b1 = (Button) findViewById(R.id.btnPicture);
-		sendButton = (Button) findViewById(R.id.sendButton);
+	sendButton = (Button) findViewById(R.id.sendButton);
 	txt = (TextView) findViewById(R.id.infout);
-		sendButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String speach = "";
-				if(ivPath.isEmpty()){
-					speach  = "Face not detected";
-				}
-				if(ivPath.size()==1){
-					speach  = "This is "+predictPic(ivPath.get(0));
-				}
-				if(ivPath.size()==2){
-					for(String i : ivPath) {
+	sendButton.setOnClickListener(new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+		    String speach = "";
+		    if(ivPath.isEmpty()){
+			speach  = "Face not detected";
+		    }
+		    if(ivPath.size()==1){
+			speach  = "This is "+predictPic(ivPath.get(0));
+		    }
+		    if(ivPath.size()==2){
+			for(String i : ivPath) {
 
-						if (ivPath.indexOf(i) == 0) {
-							speach = "This is "+predictPic(i);
-						} else {
-							speach = speach + " and " + predictPic(i);
-						}
-					}
-				}
-				else{
-					for(String i : ivPath){
-						if (ivPath.indexOf(i) == 0) {
-							speach = "This is "+predictPic(i);
-						}
-						else if(ivPath.indexOf(i) == 1){
-							speach = speach + "followed by " + predictPic(i);
-						}
-						else {
-							speach = speach + " and " + predictPic(i);
-						}
-					}
-
-				}
-				txt.setText(speach);
-				tts.speak(speach, TextToSpeech.QUEUE_ADD, null);
+			    if (ivPath.indexOf(i) == 0) {
+				speach = "This is "+predictPic(i);
+			    } else {
+				speach = speach + " and " + predictPic(i);
+			    }
 			}
-		});
+		    }
+		    else{
+			for(String i : ivPath){
+			    if (ivPath.indexOf(i) == 0) {
+				speach = "This is "+predictPic(i);
+			    }
+			    else if(ivPath.indexOf(i) == 1){
+				speach = speach + "followed by " + predictPic(i);
+			    }
+			    else {
+				speach = speach + " and " + predictPic(i);
+			    }
+			}
+
+		    }
+		    txt.setText(speach);
+		    tts.speak(speach, TextToSpeech.QUEUE_ADD, null);
+		}
+	    });
         b1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(intent, 0);
-			}
-		});
+		@Override
+		public void onClick(View v) {
+		    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		    startActivityForResult(intent, 0);
+		}
+	    });
     }
 
-	public void onRadioButtonClicked(View v) {
+    public void onRadioButtonClicked(View v) {
 
-		boolean checked = ((RadioButton) v).isChecked();
+	boolean checked = ((RadioButton) v).isChecked();
 
-		switch(v.getId()) {
-			case R.id.ryes:
-				if(checked)
-					rel = "True";
-				break;
-			case R.id.rno:
-				if(checked)
-					rel = "False";
-				break;
-			case R.id.myes:
-				if(checked)
-					mes = "True";
-				break;
-			case R.id.mno:
-				if(checked)
-					mes = "False";
-				break;
-		}
+	switch(v.getId()) {
+	case R.id.ryes:
+	    if(checked)
+		rel = "True";
+	    break;
+	case R.id.rno:
+	    if(checked)
+		rel = "False";
+	    break;
+	case R.id.myes:
+	    if(checked)
+		mes = "True";
+	    break;
+	case R.id.mno:
+	    if(checked)
+		mes = "False";
+	    break;
 	}
+    }
 
     public Bitmap toGrayscale(Bitmap bmpOriginal)
     {
@@ -174,15 +174,15 @@ public class Picture extends Activity{
 	return Uri.parse(path);
     }
 
-	private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
+    private Bitmap convert(Bitmap bitmap, Bitmap.Config config) {
 
-		Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
-		Canvas canvas = new Canvas(convertedBitmap);
-		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
-		canvas.drawBitmap(bitmap, 0, 0, paint);
-		return convertedBitmap;
-	}
+	Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), config);
+	Canvas canvas = new Canvas(convertedBitmap);
+	Paint paint = new Paint();
+	paint.setColor(Color.BLACK);
+	canvas.drawBitmap(bitmap, 0, 0, paint);
+	return convertedBitmap;
+    }
 
     public String getRealPathFromURI(Uri uri) {
 	Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -191,7 +191,7 @@ public class Picture extends Activity{
 	return cursor.getString(idx);
     }
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ivPath.clear();
         for(int x = 0;x<iv.size();x++){
             if(iv.get(x)!=null){
@@ -201,58 +201,58 @@ public class Picture extends Activity{
         iv.add((ImageView) findViewById(R.id.imageView));
         iv.add((ImageView) findViewById(R.id.imageView2));
         iv.add((ImageView) findViewById(R.id.imageView3));
-		for(int x=0;x<face.length;x++){
-			face[x]=null;
-		}
-		int count1=0;
-		for (FaceDetector.Face i : face){
-			if(i != null){
-				count1++;
-			}
-		}
-		Log.w("alzand", String.valueOf(count1)+ " is it clear");
-		// TODO Auto-generated method stub
-		try {
-			super.onActivityResult(requestCode, resultCode, data);
+	for(int x=0;x<face.length;x++){
+	    face[x]=null;
+	}
+	int count1=0;
+	for (FaceDetector.Face i : face){
+	    if(i != null){
+		count1++;
+	    }
+	}
+	Log.w("alzand", String.valueOf(count1)+ " is it clear");
+	// TODO Auto-generated method stub
+	try {
+	    super.onActivityResult(requestCode, resultCode, data);
 
 
-			//	    Log.w("alzand","line 126 "+data.getData().getPath());
-			Uri orgUri = data.getData();
-			Bitmap bp = convert(BitmapFactory.decodeStream(getContentResolver().openInputStream(orgUri)), Bitmap.Config.RGB_565);
-			FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 3);
-			int test = fd.findFaces(bp, face);
-			int count = 0;
-			Log.w("alzand", String.valueOf(test)+ " number of faces0");
-			for (FaceDetector.Face i : face){
-				if(i != null){
-					count++;
-				}
-			}
-			int index = 0;
-			newFace = new FaceDetector.Face[count];
-			for (FaceDetector.Face i : face) {
-				if (i != null) {
-					Log.w("alzand", String.valueOf(index)+ " Indexes");
-					newFace[index++] = i;
-				}
-			}
-			Log.w("alzand", String.valueOf(newFace.length)+ " number of faces");
-			for(int i = 0; i<newFace.length; i++){
-				if(newFace[i].confidence()>.4){
-					Log.w("alzand","Face detected");
-				}
-				else{
-					Log.w("alzand","Face Not detected");
-				}
-				float eyeDistance = newFace[i].eyesDistance();
-				Log.w("alzand", String.valueOf(eyeDistance));
-				PointF midPoint1=new PointF();
-				newFace[i].getMidPoint(midPoint1);
-				Log.w("alzand", String.valueOf(midPoint1.x));
-				int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
-				int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
-				int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
-				int bottom1 = Math.round(midPoint1.y + (float) (1.8 * eyeDistance));
+	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
+	    Uri orgUri = data.getData();
+	    Bitmap bp = convert(BitmapFactory.decodeStream(getContentResolver().openInputStream(orgUri)), Bitmap.Config.RGB_565);
+	    FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 3);
+	    int test = fd.findFaces(bp, face);
+	    int count = 0;
+	    Log.w("alzand", String.valueOf(test)+ " number of faces0");
+	    for (FaceDetector.Face i : face){
+		if(i != null){
+		    count++;
+		}
+	    }
+	    int index = 0;
+	    newFace = new FaceDetector.Face[count];
+	    for (FaceDetector.Face i : face) {
+		if (i != null) {
+		    Log.w("alzand", String.valueOf(index)+ " Indexes");
+		    newFace[index++] = i;
+		}
+	    }
+	    Log.w("alzand", String.valueOf(newFace.length)+ " number of faces");
+	    for(int i = 0; i<newFace.length; i++){
+		if(newFace[i].confidence()>.4){
+		    Log.w("alzand","Face detected");
+		}
+		else{
+		    Log.w("alzand","Face Not detected");
+		}
+		float eyeDistance = newFace[i].eyesDistance();
+		Log.w("alzand", String.valueOf(eyeDistance));
+		PointF midPoint1=new PointF();
+		newFace[i].getMidPoint(midPoint1);
+		Log.w("alzand", String.valueOf(midPoint1.x));
+		int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+		int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+		int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+		int bottom1 = Math.round(midPoint1.y + (float) (1.8 * eyeDistance));
                 if(left1<0){
                     left1=0;
                 }
@@ -265,25 +265,25 @@ public class Picture extends Activity{
                 if(bottom1>bp.getHeight()){
                     bottom1 = bp.getHeight();
                 }
-				Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
-				Bitmap testPic1 = toGrayscale(colorCropBm);
-				// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-				Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+		Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+		Bitmap testPic1 = toGrayscale(colorCropBm);
+		// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+		Uri tempUri = getImageUri(getApplicationContext(), testPic1);
 
-				// CALL THIS METHOD TO GET THE ACTUAL PATH
-				String finalPath = "";
-				finalPath = getRealPathFromURI(tempUri);
-				Log.w("alzand", finalPath + " filepath");
-				ivPath.add(finalPath);
-				iv.get(i).setImageBitmap(testPic1);
-//				Map temp = new HashMap();
-//				temp.put(finalPath, testPic1);
-//				cropedFaces.add(temp);
-			}
-		} catch (Exception e) {
-			Log.w("alzand","onactivityresult threw error"+e.toString());
-		}
+		// CALL THIS METHOD TO GET THE ACTUAL PATH
+		String finalPath = "";
+		finalPath = getRealPathFromURI(tempUri);
+		Log.w("alzand", finalPath + " filepath");
+		ivPath.add(finalPath);
+		iv.get(i).setImageBitmap(testPic1);
+		//				Map temp = new HashMap();
+		//				temp.put(finalPath, testPic1);
+		//				cropedFaces.add(temp);
+	    }
+	} catch (Exception e) {
+	    Log.w("alzand","onactivityresult threw error"+e.toString());
 	}
+    }
 
     protected String predictPic(String filePath) {
 	try{
@@ -317,14 +317,14 @@ public class Picture extends Activity{
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
-		String speach = "";
-		speach =  acqName + ". ";
-		if(rel.equals("True")){
-			speach = speach + gender + " is your " + relation + ". ";
-		}
-		if(mes.equals("True")){
-			speach = speach + message;
-		}
+	String speach = "";
+	speach =  acqName + ". ";
+	if(rel.equals("True")){
+	    speach = speach + gender + " is your " + relation + ". ";
+	}
+	if(mes.equals("True")){
+	    speach = speach + message;
+	}
 	return speach;
     }
 
