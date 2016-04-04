@@ -164,8 +164,10 @@ public class AddActivity extends Activity implements View.OnClickListener{
 
 
 	    //	    Log.w("alzand","line 126 "+data.getData().getPath());
-	    Bitmap bp = convert((Bitmap) data.getExtras().get("data"), Bitmap.Config.RGB_565);
-	    FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
+		Uri orgUri = data.getData();
+		Bitmap bp = convert(BitmapFactory.decodeStream(getContentResolver().openInputStream(orgUri)), Bitmap.Config.RGB_565);
+
+		FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
 	    FaceDetector.Face[] face = new FaceDetector.Face[1];
 
 	    fd.findFaces(bp, face);
