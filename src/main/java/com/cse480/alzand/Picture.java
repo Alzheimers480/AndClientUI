@@ -98,13 +98,14 @@ public class Picture extends Activity{
 
     public void sendPics(View v) {
 	String speach = "";
+	Log.w("alzand","ivPath: "+ivPath.size());
 	if(ivPath.isEmpty()){
 	    speach  = "Face not detected";
 	}
-	if(ivPath.size()==1){
+	else if(ivPath.size()==1){
 	    speach  = "This is "+predictPic(ivPath.get(0));
 	}
-	if(ivPath.size()==2){
+	else if(ivPath.size()==2){
 	    for(String i : ivPath) {
 
 		if (ivPath.indexOf(i) == 0) {
