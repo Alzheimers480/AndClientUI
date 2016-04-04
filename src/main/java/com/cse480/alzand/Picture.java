@@ -80,44 +80,7 @@ public class Picture extends Activity{
         b1 = (Button) findViewById(R.id.btnPicture);
 	sendButton = (Button) findViewById(R.id.sendButton);
 	txt = (TextView) findViewById(R.id.infout);
-	sendButton.setOnClickListener(new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-		    String speach = "";
-		    if(ivPath.isEmpty()){
-			speach  = "Face not detected";
-		    }
-		    if(ivPath.size()==1){
-			speach  = "This is "+predictPic(ivPath.get(0));
-		    }
-		    if(ivPath.size()==2){
-			for(String i : ivPath) {
 
-			    if (ivPath.indexOf(i) == 0) {
-				speach = "This is "+predictPic(i);
-			    } else {
-				speach = speach + " and " + predictPic(i);
-			    }
-			}
-		    }
-		    else{
-			for(String i : ivPath){
-			    if (ivPath.indexOf(i) == 0) {
-				speach = "This is "+predictPic(i);
-			    }
-			    else if(ivPath.indexOf(i) == 1){
-				speach = speach + "followed by " + predictPic(i);
-			    }
-			    else {
-				speach = speach + " and " + predictPic(i);
-			    }
-			}
-
-		    }
-		    txt.setText(speach);
-		    tts.speak(speach, TextToSpeech.QUEUE_ADD, null);
-		}
-	    });
         b1.setOnClickListener(new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -151,6 +114,43 @@ public class Picture extends Activity{
 	}
     }
 
+
+    public void sendPics(View v) {
+	String speach = "";
+	if(ivPath.isEmpty()){
+	    speach  = "Face not detected";
+	}
+	if(ivPath.size()==1){
+	    speach  = "This is "+predictPic(ivPath.get(0));
+	}
+	if(ivPath.size()==2){
+	    for(String i : ivPath) {
+
+		if (ivPath.indexOf(i) == 0) {
+		    speach = "This is "+predictPic(i);
+		} else {
+		    speach = speach + " and " + predictPic(i);
+		}
+	    }
+	}
+	else{
+	    for(String i : ivPath){
+		if (ivPath.indexOf(i) == 0) {
+		    speach = "This is "+predictPic(i);
+		}
+		else if(ivPath.indexOf(i) == 1){
+		    speach = speach + "followed by " + predictPic(i);
+		}
+		else {
+		    speach = speach + " and " + predictPic(i);
+		}
+	    }
+
+	}
+	txt.setText(speach);
+	tts.speak(speach, TextToSpeech.QUEUE_ADD, null);
+    }
+    
     public Bitmap toGrayscale(Bitmap bmpOriginal)
     {
 	int width, height;

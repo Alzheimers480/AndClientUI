@@ -66,7 +66,7 @@
         android:id="@+id/sendButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-	android:onClick="predictPic" />
+	android:onClick="sendPics" />
 
     <TextView
         android:text="Include Relation"
@@ -131,6 +131,4 @@
 
             </LinearLayout>
     </ScrollView>
-
-
 </LinearLayout>
