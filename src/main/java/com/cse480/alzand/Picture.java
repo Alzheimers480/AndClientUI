@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import android.graphics.Bitmap;
@@ -57,6 +58,8 @@ public class Picture extends Activity{
     String username;
 	FaceDetector.Face[] face = new FaceDetector.Face[3];
 	FaceDetector.Face[] newFace;
+	String rel = "";
+	String mes = "";
 
     
     @Override
@@ -116,13 +119,37 @@ public class Picture extends Activity{
 			}
 		});
         b1.setOnClickListener(new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-		    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-		    startActivityForResult(intent, 0);
-		}
-	    });
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(intent, 0);
+			}
+		});
     }
+
+	public void onRadioButtonClicked(View v) {
+
+		boolean checked = ((RadioButton) v).isChecked();
+
+		switch(v.getId()) {
+			case R.id.ryes:
+				if(checked)
+					rel = "True";
+				break;
+			case R.id.rno:
+				if(checked)
+					rel = "False";
+				break;
+			case R.id.myes:
+				if(checked)
+					mes = "True";
+				break;
+			case R.id.mno:
+				if(checked)
+					mes = "False";
+				break;
+		}
+	}
 
     public Bitmap toGrayscale(Bitmap bmpOriginal)
     {
@@ -289,7 +316,15 @@ public class Picture extends Activity{
 	} catch (Exception e) {
 	    Log.w("alzand",e.toString());
 	}
-	return acqName+". "+gender+" is your "+relation+". "+message;
+		String speach = "";
+		speach =  acqName + ". ";
+		if(rel.equals("True")){
+			speach = speach + gender + " is your " + relation + ". ";
+		}
+		if(mes.equals("True")){
+			speach = speach + message;
+		}
+	return speach;
     }
 
     @Override
