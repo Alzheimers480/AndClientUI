@@ -1,7 +1,6 @@
 package com.cse480.alzand;
 
 import android.app.Activity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,34 +18,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
-
 import android.widget.ImageView;
-
 import java.io.File;
-
 import android.util.Log;
 import com.squareup.okhttp.*;
 import java.io.*;
 import android.speech.tts.TextToSpeech;
-
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import org.json.*;
 
 public class Picture extends Activity{
-    Button b1;
-    Button sendButton;
     ArrayList<ImageView> iv = new ArrayList();
     TextToSpeech tts;
-    String resString;
     String acqName;
     String gender;
     ArrayList<String> ivPath = new ArrayList<String>();
@@ -60,7 +49,6 @@ public class Picture extends Activity{
     FaceDetector.Face[] newFace;
     String rel = "";
     String mes = "";
-
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,23 +65,12 @@ public class Picture extends Activity{
 		    }
 		}
 	    });
-        b1 = (Button) findViewById(R.id.btnPicture);
-	sendButton = (Button) findViewById(R.id.sendButton);
 	txt = (TextView) findViewById(R.id.infout);
-
-        b1.setOnClickListener(new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-		    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-		    startActivityForResult(intent, 0);
-		}
-	    });
     }
 
     public void onRadioButtonClicked(View v) {
 
 	boolean checked = ((RadioButton) v).isChecked();
-
 	switch(v.getId()) {
 	case R.id.ryes:
 	    if(checked)
@@ -114,6 +91,10 @@ public class Picture extends Activity{
 	}
     }
 
+    public void takePic(View v) {
+	Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+	startActivityForResult(intent, 0);
+    }
 
     public void sendPics(View v) {
 	String speach = "";
@@ -305,7 +286,7 @@ public class Picture extends Activity{
 
 	    Response response = client.newCall(request).execute();
 	    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-	    resString = response.body().string();
+	    String resString = response.body().string();
 	    Log.w("alzand","Response string :"+resString);
 	    
 	    JSONObject jObject = new JSONObject(resString);

@@ -1,134 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-   android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-   android:paddingRight="@dimen/activity_horizontal_margin"
-   android:paddingTop="@dimen/activity_vertical_margin"
-   android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginPage" android:gravity="start"
-   android:orientation="vertical"
-    android:background="@color/darkpurple">
-
-
-    <ScrollView
+	      xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+	      android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+	      android:paddingRight="@dimen/activity_horizontal_margin"
+	      android:paddingTop="@dimen/activity_vertical_margin"
+	      android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginPage" android:gravity="start"
+	      android:orientation="vertical"
+	      android:background="@color/darkpurple">
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-   <TextView
-       android:text="Camera"
-       android:textColor="@android:color/black"
-       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/textview"
-      android:textSize="35dp"
-      android:layout_alignParentTop="true"
-      android:layout_centerHorizontal="true" />
-
-    <ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/imageView"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView3"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Take Picture"
-    android:textColor="@android:color/black"
-        android:layout_marginBottom="10dp"
-    android:id="@+id/btnPicture"
-    android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send Picture"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/sendButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-	android:onClick="sendPics" />
-
-    <TextView
-        android:text="Include Relation"
-        android:textColor="@android:color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvInRelation"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+      <TextView
+	  android:text="Camera"
+	  android:textColor="@android:color/black"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/textview"
+	  android:textSize="35dp"
+	  android:layout_alignParentTop="true"
+	  android:layout_centerHorizontal="true" />
+      <ImageView
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/imageView"
+	  android:layout_centerVertical="true"
+	  android:layout_centerHorizontal="true" />
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/imageView2"
+          android:layout_centerVertical="true"
+          android:layout_centerHorizontal="true" />
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/imageView3"
+          android:layout_centerVertical="true"
+          android:layout_centerHorizontal="true" />
+      <Button
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:text="Take Picture"
+	  android:textColor="@android:color/black"
+          android:layout_marginBottom="10dp"
+	  android:id="@+id/btnPicture"
+	  android:layout_alignParentBottom="true"
+	  android:layout_centerHorizontal="true"
+	  android:onClick="takePic" />
+      <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Send Picture"
+          android:textColor="@android:color/black"
+          android:layout_marginBottom="10dp"
+          android:id="@+id/sendButton"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+	  android:onClick="sendPics" />
+      <TextView
+          android:text="Include Relation"
+          android:textColor="@android:color/black"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/tvInRelation"
+          android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true" />
+      <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:layout_width="fill_parent"
+		  android:layout_height="wrap_content"
+		  android:orientation="horizontal">
         <RadioButton android:id="@+id/ryes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yes"
-            android:textColor="@android:color/black"
-            android:onClick="onRadioButtonClicked"/>
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:text="Yes"
+		     android:textColor="@android:color/black"
+		     android:onClick="onRadioButtonClicked"/>
         <RadioButton android:id="@+id/rno"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No"
-            android:textColor="@android:color/black"
-            android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
-
-    <TextView
-        android:text="Include Message"
-        android:textColor="@android:color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvInMessage"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:text="No"
+		     android:textColor="@android:color/black"
+		     android:onClick="onRadioButtonClicked"/>
+      </RadioGroup>
+      <TextView
+          android:text="Include Message"
+          android:textColor="@android:color/black"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/tvInMessage"
+          android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true" />
+      <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:layout_width="fill_parent"
+		  android:layout_height="wrap_content"
+		  android:orientation="horizontal">
         <RadioButton android:id="@+id/myes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yes"
-            android:textColor="@android:color/black"
-            android:onClick="onRadioButtonClicked"/>
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:text="Yes"
+		     android:textColor="@android:color/black"
+		     android:onClick="onRadioButtonClicked"/>
         <RadioButton android:id="@+id/mno"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No"
-            android:textColor="@android:color/black"
-            android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
-
-    <TextView android:text="" android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/infout"
-      android:textSize="20dp"
-      android:layout_alignParentBottom="true"
-      android:layout_centerHorizontal="true" />
-
-            </LinearLayout>
-    </ScrollView>
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:text="No"
+		     android:textColor="@android:color/black"
+		     android:onClick="onRadioButtonClicked"/>
+      </RadioGroup>
+      <TextView android:text="" android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/infout"
+		android:textSize="20dp"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true" />
+    </LinearLayout>
+  </ScrollView>
 </LinearLayout>
