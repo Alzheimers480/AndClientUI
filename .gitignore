@@ -8,3 +8,4 @@ testdata
 *.jpg
 local.properties
 gradle-app.setting
+AndClientUI.iml
