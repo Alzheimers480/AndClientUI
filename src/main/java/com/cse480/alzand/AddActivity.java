@@ -173,55 +173,53 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	    fd.findFaces(bp, face);
 	    if(face[0].confidence()>.4){
 		Log.w("alzand","Face detected");
+			float eyeDistance = face[0].eyesDistance();
+			Log.w("alzand", String.valueOf(eyeDistance));
+			PointF midPoint1=new PointF();
+			face[0].getMidPoint(midPoint1);
+			Log.w("alzand", String.valueOf(midPoint1.x));
+			int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
+			int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
+			int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
+			int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
+			Log.w("alzand", String.valueOf(bp.getWidth())+" bp width");
+			Log.w("alzand", String.valueOf(bp.getHeight())+" bp Height");
+			Log.w("alzand", String.valueOf(left1)+" left");
+			Log.w("alzand", String.valueOf(right1)+" right");
+			Log.w("alzand", String.valueOf(top1)+" top");
+			Log.w("alzand", String.valueOf(bottom1)+" bottom");
+			Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
+			Bitmap testPic1 = toGrayscale(colorCropBm);
+			// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+			Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+
+			// CALL THIS METHOD TO GET THE ACTUAL PATH
+			String finalPath = getRealPathFromURI(tempUri);
+			Log.w("alzand", finalPath+" filepath");
+			switch(iv) {
+				case 0:
+					Log.w("alzand","error");
+					break;
+				case 1:
+
+					IVP1.setImageBitmap(testPic1);
+					IFP1 = finalPath;
+					break;
+
+				case 2:
+
+					IVP2.setImageBitmap(testPic1);
+					IFP2 = finalPath;
+					break;
+				case 3:
+
+					IVP3.setImageBitmap(testPic1);
+					IFP3 = finalPath;
+					break;
+			}
 	    }
 	    else{
 		Log.w("alzand","Face Not detected");
-	    }
-	    float eyeDistance = face[0].eyesDistance();
-	    Log.w("alzand", String.valueOf(eyeDistance));
-	    PointF midPoint1=new PointF();
-	    face[0].getMidPoint(midPoint1);
-	    Log.w("alzand", String.valueOf(midPoint1.x));
-	    int left1 = Math.round(midPoint1.x - (float)(1.8 * eyeDistance));
-	    int right1 = Math.round(midPoint1.x + (float)(1.4 * eyeDistance));
-	    int top1 = Math.round(midPoint1.y - (float)(1.4 * eyeDistance));
-	    int bottom1 = Math.round(midPoint1.y + (float)(1.8 * eyeDistance));
-	    Log.w("alzand", String.valueOf(bp.getWidth())+" bp width");
-	    Log.w("alzand", String.valueOf(bp.getHeight())+" bp Height");
-	    Log.w("alzand", String.valueOf(left1)+" left");
-	    Log.w("alzand", String.valueOf(right1)+" right");
-	    Log.w("alzand", String.valueOf(top1)+" top");
-	    Log.w("alzand", String.valueOf(bottom1)+" bottom");
-	    Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
-	    Bitmap testPic1 = toGrayscale(colorCropBm);
-	    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-	    Uri tempUri = getImageUri(getApplicationContext(), testPic1);
-
-	    // CALL THIS METHOD TO GET THE ACTUAL PATH
-	    String finalPath = getRealPathFromURI(tempUri);
-	    Log.w("alzand", finalPath+" filepath");
-
-
-	    switch(iv) {
-	    case 0:
-		Log.w("alzand","error");
-		break;
-	    case 1:
-
-		IVP1.setImageBitmap(testPic1);
-		IFP1 = finalPath;
-		break;
-
-	    case 2:
-
-		IVP2.setImageBitmap(testPic1);
-		IFP2 = finalPath;
-		break;
-	    case 3:
-
-		IVP3.setImageBitmap(testPic1);
-		IFP3 = finalPath;
-		break;
 	    }
 	    checkValidation();
 	} catch (Exception e) {

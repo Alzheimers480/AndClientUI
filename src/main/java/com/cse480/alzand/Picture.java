@@ -238,7 +238,8 @@ public class Picture extends Activity{
 			}
 			Log.w("alzand", String.valueOf(newFace.length)+ " number of faces");
 			for(int i = 0; i<newFace.length; i++){
-				if(newFace[i].confidence()>.4){
+				if(newFace[i].confidence()>.8){
+
 					Log.w("alzand","Face detected");
 				}
 				else{
@@ -318,12 +319,17 @@ public class Picture extends Activity{
 	    Log.w("alzand",e.toString());
 	}
 		String speach = "";
-		speach =  acqName + ". ";
-		if(rel.equals("True")){
-			speach = speach + gender + " is your " + relation + ". ";
+		if(acqName==null||Double.parseDouble(distance)<=175){
+			speach = "Someone you don't know";
 		}
-		if(mes.equals("True")){
-			speach = speach + message;
+		else{
+			speach =  acqName + ". ";
+			if(rel.equals("True")&&relation!=null){
+				speach = speach + gender + " is your " + relation + ". ";
+			}
+			if(mes.equals("True")&&message!=null){
+				speach = speach + message;
+			}
 		}
 	return speach;
     }
