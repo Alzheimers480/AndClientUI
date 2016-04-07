@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.squareup.okhttp.*;
@@ -157,6 +158,125 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	return cursor.getString(idx);
     }
 
+	private static ArrayList<int[]> imageHistogram(Bitmap input) {
+		int[] rhistogram = new int[256];
+		int[] ghistogram = new int[256];
+		int[] bhistogram = new int[256];
+
+		for(int i=0; i<rhistogram.length; i++) rhistogram[i] = 0;
+		for(int i=0; i<ghistogram.length; i++) ghistogram[i] = 0;
+		for(int i=0; i<bhistogram.length; i++) bhistogram[i] = 0;
+
+		for(int i=0; i<input.getWidth(); i++) {
+			for(int j=0; j<input.getHeight(); j++) {
+				int color = input.getPixel(i, j);
+				int red, green, blue;
+//                red = new Color(input.getPixel(i, j)).getRed();
+//                green = new Color(input.getRGB (i, j)).getGreen();
+//                blue = new Color(input.getRGB (i, j)).getBlue();
+				red = Color.red(color);
+				green = Color.green(color);
+				blue = Color.blue(color);
+
+				// Increase the values of colors
+				rhistogram[red]++; ghistogram[green]++; bhistogram[blue]++;
+
+			}
+		}
+
+		ArrayList<int[]> hist = new ArrayList<int[]>();
+		hist.add(rhistogram);
+		hist.add(ghistogram);
+		hist.add(bhistogram);
+
+		return hist;
+	}
+
+	// Get the histogram equalization lookup table for separate R, G, B channels
+	private static ArrayList<int[]> histogramEqualizationLUT(Bitmap input) {
+		// Get an image histogram - calculated values by R, G, B channels
+		ArrayList<int[]> imageHist = imageHistogram(input);
+
+		// Create the lookup table
+		ArrayList<int[]> imageLUT = new ArrayList<int[]>();
+
+		// Fill the lookup table
+		int[] rhistogram = new int[256];
+		int[] ghistogram = new int[256];
+		int[] bhistogram = new int[256];
+
+		for(int i=0; i<rhistogram.length; i++) rhistogram[i] = 0;
+		for(int i=0; i<ghistogram.length; i++) ghistogram[i] = 0;
+		for(int i=0; i<bhistogram.length; i++) bhistogram[i] = 0;
+
+		long sumr = 0;
+		long sumg = 0;
+		long sumb = 0;
+
+		float scale_factor = (float) (255.0 / (input.getWidth() * input.getHeight()));
+
+		for(int i=0; i<rhistogram.length; i++) {
+			sumr += imageHist.get(0)[i];
+			int valr = (int) (sumr * scale_factor);
+			if(valr > 255) {
+				rhistogram[i] = 255;
+			}
+			else rhistogram[i] = valr;
+
+			sumg += imageHist.get(1)[i];
+			int valg = (int) (sumg * scale_factor);
+			if(valg > 255) {
+				ghistogram[i] = 255;
+			}
+			else ghistogram[i] = valg;
+
+			sumb += imageHist.get(2)[i];
+			int valb = (int) (sumb * scale_factor);
+			if(valb > 255) {
+				bhistogram[i] = 255;
+			}
+			else bhistogram[i] = valb;
+		}
+
+		imageLUT.add(rhistogram);
+		imageLUT.add(ghistogram);
+		imageLUT.add(bhistogram);
+
+		return imageLUT;
+	}
+
+	private static Bitmap histogramEqualization(Bitmap original) {
+		int red, green, blue, alpha;
+		int newPixel = 0;
+
+		// Get the Lookup table for histogram equalization
+		ArrayList<int[]> histLUT = histogramEqualizationLUT(original);
+		int WIDTH = original.getWidth();
+		int HEIGHT = original.getHeight();
+		Bitmap histogramEQ = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+
+		for(int i = 0; i < WIDTH; i++) {
+			for(int j = 0; j < HEIGHT; j++) {
+				int color = original.getPixel(i, j);
+				alpha = Color.alpha(color);
+				red = Color.red(color);
+				green = Color.green(color);
+				blue = Color.blue(color);
+
+				// Set new pixel values using the histogram lookup table
+				red = histLUT.get(0)[red];
+				green = histLUT.get(1)[green];
+				blue = histLUT.get(2)[blue];
+
+				newPixel = Color.argb(alpha, red, green, blue);
+
+				histogramEQ.setPixel(i, j, newPixel);
+			}
+		}
+
+		return histogramEQ;
+	}
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	// TODO Auto-generated method stub
 	try {
@@ -194,8 +314,9 @@ public class AddActivity extends Activity implements View.OnClickListener{
 	    Log.w("alzand", String.valueOf(bottom1)+" bottom");
 	    Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1-left1, bottom1-top1);
 	    Bitmap testPic1 = toGrayscale(colorCropBm);
+		Bitmap testPic2 = histogramEqualization(testPic1);
 	    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-	    Uri tempUri = getImageUri(getApplicationContext(), testPic1);
+	    Uri tempUri = getImageUri(getApplicationContext(), testPic2);
 
 	    // CALL THIS METHOD TO GET THE ACTUAL PATH
 	    String finalPath = getRealPathFromURI(tempUri);
@@ -208,18 +329,18 @@ public class AddActivity extends Activity implements View.OnClickListener{
 		break;
 	    case 1:
 
-		IVP1.setImageBitmap(testPic1);
+		IVP1.setImageBitmap(testPic2);
 		IFP1 = finalPath;
 		break;
 
 	    case 2:
 
-		IVP2.setImageBitmap(testPic1);
+		IVP2.setImageBitmap(testPic2);
 		IFP2 = finalPath;
 		break;
 	    case 3:
 
-		IVP3.setImageBitmap(testPic1);
+		IVP3.setImageBitmap(testPic2);
 		IFP3 = finalPath;
 		break;
 	    }
