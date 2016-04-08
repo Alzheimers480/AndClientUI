@@ -14,6 +14,7 @@ import android.media.FaceDetector;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -26,6 +27,9 @@ import java.io.File;
 
 import android.util.Log;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.*;
 
 import java.io.*;
@@ -55,6 +59,11 @@ public class Picture extends Activity {
     FaceDetector.Face[] newFace;
     String rel = "";
     String mes = "";
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +81,9 @@ public class Picture extends Activity {
             }
         });
         txt = (TextView) findViewById(R.id.infout);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void onRadioButtonClicked(View v) {
@@ -98,7 +110,7 @@ public class Picture extends Activity {
     }
 
     public void takePic(View v) {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 0);
     }
 
@@ -130,7 +142,7 @@ public class Picture extends Activity {
             }
 
         }
-        txt.setText(speach);
+        txt.setText(speach+" Distance = "+distance);
         tts.speak(speach, TextToSpeech.QUEUE_ADD, null);
     }
 
@@ -178,12 +190,12 @@ public class Picture extends Activity {
         int[] ghistogram = new int[256];
         int[] bhistogram = new int[256];
 
-        for(int i=0; i<rhistogram.length; i++) rhistogram[i] = 0;
-        for(int i=0; i<ghistogram.length; i++) ghistogram[i] = 0;
-        for(int i=0; i<bhistogram.length; i++) bhistogram[i] = 0;
+        for (int i = 0; i < rhistogram.length; i++) rhistogram[i] = 0;
+        for (int i = 0; i < ghistogram.length; i++) ghistogram[i] = 0;
+        for (int i = 0; i < bhistogram.length; i++) bhistogram[i] = 0;
 
-        for(int i=0; i<input.getWidth(); i++) {
-            for(int j=0; j<input.getHeight(); j++) {
+        for (int i = 0; i < input.getWidth(); i++) {
+            for (int j = 0; j < input.getHeight(); j++) {
                 int color = input.getPixel(i, j);
                 int red, green, blue;
 //                red = new Color(input.getPixel(i, j)).getRed();
@@ -194,7 +206,9 @@ public class Picture extends Activity {
                 blue = Color.blue(color);
 
                 // Increase the values of colors
-                rhistogram[red]++; ghistogram[green]++; bhistogram[blue]++;
+                rhistogram[red]++;
+                ghistogram[green]++;
+                bhistogram[blue]++;
 
             }
         }
@@ -220,9 +234,9 @@ public class Picture extends Activity {
         int[] ghistogram = new int[256];
         int[] bhistogram = new int[256];
 
-        for(int i=0; i<rhistogram.length; i++) rhistogram[i] = 0;
-        for(int i=0; i<ghistogram.length; i++) ghistogram[i] = 0;
-        for(int i=0; i<bhistogram.length; i++) bhistogram[i] = 0;
+        for (int i = 0; i < rhistogram.length; i++) rhistogram[i] = 0;
+        for (int i = 0; i < ghistogram.length; i++) ghistogram[i] = 0;
+        for (int i = 0; i < bhistogram.length; i++) bhistogram[i] = 0;
 
         long sumr = 0;
         long sumg = 0;
@@ -230,27 +244,24 @@ public class Picture extends Activity {
 
         float scale_factor = (float) (255.0 / (input.getWidth() * input.getHeight()));
 
-        for(int i=0; i<rhistogram.length; i++) {
+        for (int i = 0; i < rhistogram.length; i++) {
             sumr += imageHist.get(0)[i];
             int valr = (int) (sumr * scale_factor);
-            if(valr > 255) {
+            if (valr > 255) {
                 rhistogram[i] = 255;
-            }
-            else rhistogram[i] = valr;
+            } else rhistogram[i] = valr;
 
             sumg += imageHist.get(1)[i];
             int valg = (int) (sumg * scale_factor);
-            if(valg > 255) {
+            if (valg > 255) {
                 ghistogram[i] = 255;
-            }
-            else ghistogram[i] = valg;
+            } else ghistogram[i] = valg;
 
             sumb += imageHist.get(2)[i];
             int valb = (int) (sumb * scale_factor);
-            if(valb > 255) {
+            if (valb > 255) {
                 bhistogram[i] = 255;
-            }
-            else bhistogram[i] = valb;
+            } else bhistogram[i] = valb;
         }
 
         imageLUT.add(rhistogram);
@@ -270,8 +281,8 @@ public class Picture extends Activity {
         int HEIGHT = original.getHeight();
         Bitmap histogramEQ = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
 
-        for(int i = 0; i < WIDTH; i++) {
-            for(int j = 0; j < HEIGHT; j++) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
                 int color = original.getPixel(i, j);
                 alpha = Color.alpha(color);
                 red = Color.red(color);
@@ -348,7 +359,7 @@ public class Picture extends Activity {
                     newFace[i].getMidPoint(midPoint1);
                     Log.w("alzand", String.valueOf(midPoint1.x));
                     int left1 = Math.round(midPoint1.x - (float) (1.0 * eyeDistance));
-                    int right1 = Math.round(midPoint1.x + (float) (1 * eyeDistance));
+                    int right1 = Math.round(midPoint1.x + (float) (1.0 * eyeDistance));
                     int top1 = Math.round(midPoint1.y - (float) (.95 * eyeDistance));
                     int bottom1 = Math.round(midPoint1.y + (float) (1.8 * eyeDistance));
                     if (left1 < 0) {
@@ -366,15 +377,17 @@ public class Picture extends Activity {
                     Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1 - left1, bottom1 - top1);
                     Bitmap testPic1 = toGrayscale(colorCropBm);
                     Bitmap testPic2 = histogramEqualization(testPic1);
+                    float ratio = testPic2.getHeight()/testPic2.getWidth();
+                    Bitmap testpic3 = Bitmap.createScaledBitmap(testPic2, 400, 500, false);
                     // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                    Uri tempUri = getImageUri(getApplicationContext(), testPic2);
+                    Uri tempUri = getImageUri(getApplicationContext(), testpic3);
 
                     // CALL THIS METHOD TO GET THE ACTUAL PATH
                     String finalPath = "";
                     finalPath = getRealPathFromURI(tempUri);
                     Log.w("alzand", finalPath + " filepath");
                     ivPath.add(finalPath);
-                    iv.get(i).setImageBitmap(testPic2);
+                    iv.get(i).setImageBitmap(testpic3);
                     //				Map temp = new HashMap();
                     //				temp.put(finalPath, testPic1);
                     //				cropedFaces.add(temp);
@@ -421,10 +434,9 @@ public class Picture extends Activity {
             Log.w("alzand", e.toString());
         }
         String speach = "";
-        if(acqName==null||Double.parseDouble(distance)>175){
+        if (acqName == null || Double.parseDouble(distance) > 175) {
             speach = "someone you don't know";
-        }
-        else{
+        } else {
             speach = acqName + ". ";
             if (rel.equals("True")) {
                 speach = speach + gender + " is your " + relation + ". ";
@@ -439,5 +451,45 @@ public class Picture extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client2.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Picture Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.cse480.alzand/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client2, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Picture Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.cse480.alzand/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client2, viewAction);
+        client2.disconnect();
     }
 }

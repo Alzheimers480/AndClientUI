@@ -4,7 +4,7 @@
 	  android:versionCode="1"
 	  android:versionName="1.0">
 
-  <uses-sdk android:minSdkVersion="7" />
+  <uses-sdk android:minSdkVersion="9" />
 
   <uses-permission android:name="android.permission.INTERNET" />
 
@@ -46,6 +46,11 @@
 	      android:theme="@android:style/Theme.NoTitleBar"
 	      android:screenOrientation="portrait"
 	      android:configChanges="orientation|keyboardHidden"/>
+      <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+           App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+      <meta-data
+          android:name="com.google.android.gms.version"
+          android:value="@integer/google_play_services_version" />
   </application>
 
 </manifest>
