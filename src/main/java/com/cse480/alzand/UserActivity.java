@@ -9,7 +9,7 @@ import android.util.*;
 
 public class UserActivity extends Activity implements View.OnClickListener{
 
-    Button bLogout, b1, bAddAcquaintance;
+    Button bLogout, b1, bAddAcquaintance, bDeleteAcqu;
     String username ="switch202";
     //TextView tvAcquaintance;
 
@@ -23,9 +23,10 @@ public class UserActivity extends Activity implements View.OnClickListener{
 
 	    bLogout = (Button) findViewById(R.id.bLogout);
 	    b1 = (Button) findViewById(R.id.b1);
+        bDeleteAcqu = (Button) findViewById(R.id.bDeleteAcquaintance);
 	    bAddAcquaintance = (Button) findViewById(R.id.bAddAcquaintance);
 	    //tvAcquaintance = (TextView) findViewById(R.id.tvAcquaintance);
-
+        bDeleteAcqu.setOnClickListener(this);
 	    bLogout.setOnClickListener(this);
 	    b1.setOnClickListener(this);
 	    bAddAcquaintance.setOnClickListener(this);
@@ -34,6 +35,7 @@ public class UserActivity extends Activity implements View.OnClickListener{
 	    Log.w("alzand","onCreate useractivity threw error"+e.toString());
 	}
     }
+
 
     @Override
     public void onClick(View v) {
@@ -51,6 +53,10 @@ public class UserActivity extends Activity implements View.OnClickListener{
                 finish();
                 startActivity(new Intent(this, AddActivity.class).putExtra("USER_UID", username));
                 break;
+            case R.id.bDeleteAcquaintance:
+                finish();
+                startActivity(new Intent(this, DeleteAcqu.class).putExtra("USER_UID", username));
+
 	    }
 	} catch (Exception e) {
 	    Log.w("alzand","onClick useractivity threw error"+e.toString());
