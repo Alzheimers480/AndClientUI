@@ -286,11 +286,15 @@ public class AddActivity extends Activity implements View.OnClickListener {
             //	    Log.w("alzand","line 126 "+data.getData().getPath());
             Uri orgUri = data.getData();
             Bitmap bp = convert(BitmapFactory.decodeStream(getContentResolver().openInputStream(orgUri)), Bitmap.Config.RGB_565);
-
-            FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 1);
+            Log.w("alzand", String.valueOf(bp.getHeight()) + "<-This is the height2 " + String.valueOf(bp.getWidth()) + "<-This is the width2");
+            Double bpHeight =(double) bp.getHeight();
+            Double bpWidth = (double) bp.getWidth();
+            float ratio =  (float) (bpHeight/bpWidth);
+            Bitmap bp2 = Bitmap.createScaledBitmap(bp, 800, Math.round(800*ratio), false);
+            FaceDetector fd = new FaceDetector(bp2.getWidth(), bp2.getHeight(), 1);
             FaceDetector.Face[] face = new FaceDetector.Face[1];
 
-            fd.findFaces(bp, face);
+            fd.findFaces(bp2, face);
             if (face[0].confidence() > .51) {
                 Log.w("alzand", "Face detected");
                 float eyeDistance = face[0].eyesDistance();
@@ -302,13 +306,29 @@ public class AddActivity extends Activity implements View.OnClickListener {
                 int right1 = Math.round(midPoint1.x + (float) (1.0 * eyeDistance));
                 int top1 = Math.round(midPoint1.y - (float) (.95 * eyeDistance));
                 int bottom1 = Math.round(midPoint1.y + (float) (1.8 * eyeDistance));
+                if (left1 < 0) {
+                    left1 = 0;
+                }
+                if (right1 > bp2.getWidth()) {
+                    right1 = bp2.getWidth();
+                }
+                if (top1 < 0) {
+                    top1 = 0;
+                }
+                if (bottom1 > bp2.getHeight()) {
+                    bottom1 = bp2.getHeight();
+                }
                 Log.w("alzand", String.valueOf(bp.getWidth()) + " bp width");
                 Log.w("alzand", String.valueOf(bp.getHeight()) + " bp Height");
                 Log.w("alzand", String.valueOf(left1) + " left");
                 Log.w("alzand", String.valueOf(right1) + " right");
                 Log.w("alzand", String.valueOf(top1) + " top");
                 Log.w("alzand", String.valueOf(bottom1) + " bottom");
-                Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1 - left1, bottom1 - top1);
+                Double bp2Width = (double) bp2.getWidth();
+                Double bp2Height = (double) bp2.getHeight();
+                float widthRatio = (float) (bpWidth/bp2Width);
+                float heightRatio = (float) (bpHeight/bp2Height);
+                Bitmap colorCropBm = Bitmap.createBitmap(bp, Math.round(left1*widthRatio), Math.round(top1*heightRatio), Math.round((right1 - left1)*widthRatio), Math.round((bottom1 - top1)*heightRatio));
                 Bitmap testPic1 = toGrayscale(colorCropBm);
                 Bitmap testPic2 = histogramEqualization(testPic1);
                 Bitmap testPic3 = Bitmap.createScaledBitmap(testPic2, 400, 500, false);

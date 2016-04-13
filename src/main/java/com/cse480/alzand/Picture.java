@@ -331,8 +331,16 @@ public class Picture extends Activity {
             //	    Log.w("alzand","line 126 "+data.getData().getPath());
             Uri orgUri = data.getData();
             Bitmap bp = convert(BitmapFactory.decodeStream(getContentResolver().openInputStream(orgUri)), Bitmap.Config.RGB_565);
-            FaceDetector fd = new FaceDetector(bp.getWidth(), bp.getHeight(), 3);
-            fd.findFaces(bp, face);
+            Log.w("alzand", String.valueOf(bp.getHeight()) + "<-This is the height2 " + String.valueOf(bp.getWidth()) + "<-This is the width2");
+            Double bpHeight =(double) bp.getHeight();
+            Double bpWidth = (double) bp.getWidth();
+            float ratio =  (float) (bpHeight/bpWidth);
+            Log.w("alzand", String.valueOf(ratio));
+            Log.w("alzand", String.valueOf(bpWidth));
+            Bitmap bp2 = Bitmap.createScaledBitmap(bp, 800, Math.round(800*ratio), false);
+            Log.w("alzand", String.valueOf(bp.getHeight()) + "<-This is the height"+String.valueOf(bp.getWidth())+"<-This is the width");
+            FaceDetector fd = new FaceDetector(bp2.getWidth(), bp2.getHeight(), 3);
+            fd.findFaces(bp2, face);
             int count = 0;
             //Log.w("alzand", String.valueOf(test) + " number of faces0");
             for (FaceDetector.Face i : face) {
@@ -365,19 +373,22 @@ public class Picture extends Activity {
                     if (left1 < 0) {
                         left1 = 0;
                     }
-                    if (right1 > bp.getWidth()) {
-                        right1 = bp.getWidth();
+                    if (right1 > bp2.getWidth()) {
+                        right1 = bp2.getWidth();
                     }
                     if (top1 < 0) {
                         top1 = 0;
                     }
-                    if (bottom1 > bp.getHeight()) {
-                        bottom1 = bp.getHeight();
+                    if (bottom1 > bp2.getHeight()) {
+                        bottom1 = bp2.getHeight();
                     }
-                    Bitmap colorCropBm = Bitmap.createBitmap(bp, left1, top1, right1 - left1, bottom1 - top1);
+                    Double bp2Width = (double) bp2.getWidth();
+                    Double bp2Height = (double) bp2.getHeight();
+                    float widthRatio = (float) (bpWidth/bp2Width);
+                    float heightRatio = (float) (bpHeight/bp2Height);
+                    Bitmap colorCropBm = Bitmap.createBitmap(bp, Math.round(left1*widthRatio), Math.round(top1*heightRatio), Math.round((right1 - left1)*widthRatio), Math.round((bottom1 - top1)*heightRatio));
                     Bitmap testPic1 = toGrayscale(colorCropBm);
                     Bitmap testPic2 = histogramEqualization(testPic1);
-                    float ratio = testPic2.getHeight()/testPic2.getWidth();
                     Bitmap testpic3 = Bitmap.createScaledBitmap(testPic2, 400, 500, false);
                     // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
                     Uri tempUri = getImageUri(getApplicationContext(), testpic3);
@@ -434,7 +445,7 @@ public class Picture extends Activity {
             Log.w("alzand", e.toString());
         }
         String speach = "";
-        if (acqName == null || Double.parseDouble(distance) > 175) {
+        if (acqName == null || Double.parseDouble(distance) > 13000) {
             speach = "someone you don't know";
         } else {
             speach = acqName + ". ";
