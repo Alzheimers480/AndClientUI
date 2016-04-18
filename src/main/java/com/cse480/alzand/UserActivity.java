@@ -22,7 +22,7 @@ public class UserActivity extends Activity implements View.OnClickListener{
 	    setContentView(R.layout.activity_user);
 
 	    bLogout = (Button) findViewById(R.id.bLogout);
-	    b1 = (Button) findViewById(R.id.b1);
+    b1 = (Button) findViewById(R.id.b1);
         bDeleteAcqu = (Button) findViewById(R.id.bDeleteAcquaintance);
 	    bAddAcquaintance = (Button) findViewById(R.id.bAddAcquaintance);
 	    //tvAcquaintance = (TextView) findViewById(R.id.tvAcquaintance);

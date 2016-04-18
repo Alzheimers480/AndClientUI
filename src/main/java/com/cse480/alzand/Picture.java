@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import java.io.File;
 
@@ -46,6 +47,7 @@ import org.json.*;
 
 public class Picture extends Activity {
     ArrayList<ImageView> iv = new ArrayList();
+    ArrayList<Button> modBtns = new ArrayList<Button>();
     TextToSpeech tts;
     String acqName;
     String gender;
@@ -53,12 +55,14 @@ public class Picture extends Activity {
     String relation;
     String message;
     String distance;
+    ArrayList<String> acqID = new ArrayList<String>();
     TextView txt;
     String username;
     FaceDetector.Face[] face = new FaceDetector.Face[3];
     FaceDetector.Face[] newFace;
     String rel = "";
     String mes = "";
+    SeekBar maxDistance;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -114,6 +118,51 @@ public class Picture extends Activity {
         startActivityForResult(intent, 0);
     }
 
+    public void modAcqu(View v) {
+        switch(v.getId()) {
+            case R.id.mod1:
+                modAcquAPI(username, acqID.get(0), ivPath.get(0));
+                modBtns.get(0).setVisibility(View.GONE);
+                break;
+            case R.id.mod2:
+                modAcquAPI(username, acqID.get(1), ivPath.get(1));
+                modBtns.get(1).setVisibility(View.GONE);
+                break;
+            case R.id.mod3:
+                modAcquAPI(username, acqID.get(2), ivPath.get(2));
+                modBtns.get(2).setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    public void modAcquAPI(String userID, String acquID, String filePath) {
+        try {
+            MediaType MEDIA_TYPE_PGM = MediaType.parse("image/x-portable-graymap");
+            OkHttpClient client = new OkHttpClient();
+            File picture = new File(filePath);
+            Log.w("alzand", "File...::::" + picture + " : " + picture.exists());
+
+            RequestBody requestBody = new MultipartBuilder()
+                    .type(MultipartBuilder.FORM)
+                    .addFormDataPart("USERNAME", username)
+                    .addFormDataPart("ACQUNAME", acquID)
+                    .addFormDataPart("pics[]", filePath, RequestBody.create(MEDIA_TYPE_PGM, picture))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(LoginPage.serverUrl + "modacqu.php")
+                    .post(requestBody)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            String resString = response.body().string();
+            Log.w("alzand", "Response string :" + resString);
+        } catch (Throwable throwme) {
+
+        }
+    }
+
     public void sendPics(View v) {
         String speach = "";
         Log.w("alzand", "ivPath: " + ivPath.size());
@@ -121,23 +170,61 @@ public class Picture extends Activity {
             speach = "Face not detected";
         } else if (ivPath.size() == 1) {
             speach = "This is " + predictPic(ivPath.get(0));
+
+            if(speach.equals("This is someone you don't know")){
+                Log.w("alzand", speach+" 1");
+            }
+            else{
+                Log.w("alzand", speach+" 2");
+                modBtns.get(0).setVisibility(View.VISIBLE);
+            }
         } else if (ivPath.size() == 2) {
             for (String i : ivPath) {
 
                 if (ivPath.indexOf(i) == 0) {
                     speach = "This is " + predictPic(i);
+                    if(speach.equals("This is someone you don't know")){
+
+                    }
+                    else{
+                        modBtns.get(0).setVisibility(View.VISIBLE);
+                    }
                 } else {
                     speach = speach + " and " + predictPic(i);
+                    if(speach.equals("This is someone you don't know")){
+
+                    }
+                    else{
+                        modBtns.get(1).setVisibility(View.VISIBLE);
+                    }
                 }
             }
         } else {
             for (String i : ivPath) {
                 if (ivPath.indexOf(i) == 0) {
                     speach = "This is " + predictPic(i);
+                    if(speach == "This is someone you don't know"){
+
+                    }
+                    else{
+                        modBtns.get(0).setVisibility(View.VISIBLE);
+                    }
                 } else if (ivPath.indexOf(i) == 1) {
                     speach = speach + "followed by " + predictPic(i);
+                    if(speach == "This is someone you don't know"){
+
+                    }
+                    else{
+                        modBtns.get(1).setVisibility(View.VISIBLE);
+                    }
                 } else {
                     speach = speach + " and " + predictPic(i);
+                    if(speach == "This is someone you don't know"){
+
+                    }
+                    else{
+                        modBtns.get(2).setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -305,14 +392,22 @@ public class Picture extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ivPath.clear();
+        acqID.clear();
+        for (Button b : modBtns) {
+            b.setVisibility(View.GONE);
+        }
         for (int x = 0; x < iv.size(); x++) {
             if (iv.get(x) != null) {
                 iv.get(x).setImageResource(0);
             }
         }
         iv.add((ImageView) findViewById(R.id.imageView));
+        modBtns.add((Button) findViewById(R.id.mod1));
         iv.add((ImageView) findViewById(R.id.imageView2));
+        modBtns.add((Button) findViewById(R.id.mod2));
         iv.add((ImageView) findViewById(R.id.imageView3));
+        modBtns.add((Button) findViewById(R.id.mod3));
+
         for (int x = 0; x < face.length; x++) {
             face[x] = null;
         }
@@ -441,11 +536,12 @@ public class Picture extends Activity {
             message = jObject.getString("DESCRIPTION");
             gender = jObject.getString("GENDER").equals("male") ? "He" : "She";
             distance = jObject.getString("DISTANCE");
+            acqID.add(jObject.getString("ACQUAINTANCE_UID"));
         } catch (Exception e) {
             Log.w("alzand", e.toString());
         }
         String speach = "";
-        if (acqName == null || Double.parseDouble(distance) > 13000) {
+        if (acqName == null || Double.parseDouble(distance) > 15000) {
             speach = "someone you don't know";
         } else {
             speach = acqName + ". ";
