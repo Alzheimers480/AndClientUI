@@ -22,8 +22,8 @@ import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.SeekBar;
-
 import java.io.File;
 
 import android.util.Log;
@@ -63,6 +63,8 @@ public class Picture extends Activity {
     String rel = "";
     String mes = "";
     SeekBar maxDistance;
+    TextView distanceText;
+    int distanceValue;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -85,10 +87,34 @@ public class Picture extends Activity {
             }
         });
         txt = (TextView) findViewById(R.id.infout);
+        distanceText = (TextView) findViewById(R.id.distanceText);
+        maxDistance = (SeekBar) findViewById(R.id.distanceSlider);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        distanceText.setText("Max Dinstance: " + maxDistance.getProgress());
+        distanceValue = 0;
+        maxDistance.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                distanceText.setText("Max Dinstance: "+ maxDistance.getProgress());
+                distanceValue = maxDistance.getProgress();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                distanceText.setText("Max Dinstance: "+ maxDistance.getProgress());
+                distanceValue = maxDistance.getProgress();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                distanceText.setText("Max Dinstance: "+ maxDistance.getProgress());
+                distanceValue = maxDistance.getProgress();
+            }
+        });
     }
+
 
     public void onRadioButtonClicked(View v) {
 
@@ -541,7 +567,7 @@ public class Picture extends Activity {
             Log.w("alzand", e.toString());
         }
         String speach = "";
-        if (acqName == null || Double.parseDouble(distance) > 15000) {
+        if (acqName == null || Double.parseDouble(distance) > distanceValue) {
             speach = "someone you don't know";
         } else {
             speach = acqName + ". ";
